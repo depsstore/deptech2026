@@ -1,0 +1,168 @@
+/* =====================================================
+   DEPTECH SETTINGS — Dark Mode (minimal, karena
+   warna sudah dihandle theme.css + CSS lain)
+===================================================== */
+
+
+/* CANVAS — redup di dark mode */
+
+html.dark-mode .bg-canvas {
+    filter: brightness(0.35) saturate(0.6);
+}
+
+
+/* NAVBAR — paksa jadi abu gelap di dark mode */
+
+html.dark-mode .navbar-blue {
+    background: linear-gradient(135deg, #1e293b, #0f172a) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+
+/* BALANCE CARD — glass gelap */
+
+html.dark-mode .balance-card-new {
+    background: rgba(30, 41, 59, 0.92) !important;
+    border-color: var(--border-base) !important;
+}
+
+
+/* TEXT COLOR YANG MASIH HARD-CODED DI HTML */
+
+html.dark-mode .text-\[\#1a2744\],
+html.dark-mode .text-\[\#182230\],
+html.dark-mode .text-\[\#344054\] {
+    color: var(--text-primary) !important;
+}
+
+html.dark-mode .text-\[\#4b6a8b\],
+html.dark-mode .text-\[\#667085\] {
+    color: var(--text-secondary) !important;
+}
+
+html.dark-mode .text-\[\#6b8bb0\],
+html.dark-mode .text-\[\#98a2b3\] {
+    color: var(--text-muted) !important;
+}
+
+html.dark-mode .text-\[\#2563eb\] {
+    color: #60a5fa !important;
+}
+
+
+/* BG PUTIH dari Tailwind */
+
+html.dark-mode .bg-white {
+    background-color: var(--bg-card) !important;
+}
+
+html.dark-mode .bg-\[\#eff6ff\] {
+    background-color: var(--accent-soft) !important;
+}
+
+html.dark-mode .bg-\[\#f4f5f7\],
+html.dark-mode .bg-\[\#f5f6f8\],
+html.dark-mode .bg-\[\#f5f7fa\] {
+    background-color: var(--bg-input) !important;
+}
+
+
+/* BORDER dari Tailwind */
+
+html.dark-mode .border-\[\#e4edf7\],
+html.dark-mode .border-\[\#f0f1f3\],
+html.dark-mode .border-blue-100\/15 {
+    border-color: var(--border-base) !important;
+}
+
+
+/* PROMO CARD GRADIENT — matikan */
+
+html.dark-mode [class*="bg-gradient-to-"] {
+    background: var(--bg-card) !important;
+    background-image: none !important;
+}
+
+
+/* HEADING default */
+
+html.dark-mode h1,
+html.dark-mode h2,
+html.dark-mode h3,
+html.dark-mode strong {
+    color: var(--text-primary);
+}
+
+html.dark-mode .navbar-blue h1,
+html.dark-mode .navbar-blue span,
+html.dark-mode .navbar-blue strong {
+    color: #ffffff;
+}
+
+
+/* =====================================================
+   NOTIFIKASI PAGE
+===================================================== */
+
+.notif-item {
+    position: relative;
+    align-items: flex-start;
+    padding: 14px 16px;
+}
+
+.notif-item.unread {
+    background: var(--accent-soft);
+}
+
+.notif-item.unread .item-title {
+    font-weight: 700;
+}
+
+.notif-item .notif-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 15px;
+}
+
+.notif-item .notif-icon.income {
+    background: var(--success-soft);
+    color: var(--success);
+}
+
+.notif-item .notif-icon.expense {
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+.notif-item .notif-icon.security {
+    background: var(--warning-soft);
+    color: var(--warning);
+}
+
+.notif-item .notif-icon.promo {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.notif-item .notif-icon.info {
+    background: var(--bg-muted);
+    color: var(--text-muted);
+}
+
+.notif-item .item-time {
+    font-size: 9px;
+    color: var(--text-soft);
+    margin-top: 4px;
+}
+
+.notif-item .status-dot {
+    position: absolute;
+    top: 18px;
+    right: 16px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}

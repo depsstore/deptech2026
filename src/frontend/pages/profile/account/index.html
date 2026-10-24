@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>DepTech</title>
+
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="min-h-screen pb-[90px] page-content">
+
+        <!-- NAVBAR -->
+        <nav class="navbar-blue">
+            <a href="/index.html" class="brand">
+                <img src="/src/frontend/assets/img/brandnolatar.png" alt="DEPTECH" class="logo-white"
+                    onerror="this.style.display='none'">
+                <span class="font-days">
+                    DEP<strong>TECH</strong>
+                </span>
+            </a>
+            <div class="nav-actions">
+                <a href="/src/frontend/pages/notifikasi.html" class="nav-btn">
+                    <i class="fa-regular fa-bell"></i>
+                </a>
+                <a href="index.html" class="nav-btn">
+                    <i class="fa-solid fa-gear"></i>
+                </a>
+            </div>
+        </nav>
+
+        <!-- MAIN -->
+        <main class="profile-page">
+
+            <!-- ACCOUNT HERO -->
+            <section class="account-hero">
+                <div class="account-pattern"></div>
+                <div class="account-pattern-two"></div>
+                <div class="account-hero-content">
+                    <div class="account-hero-row">
+                        <div class="account-avatar" data-avatar>?</div>
+                        <div class="account-info">
+                            <strong class="account-name" id="accountName">Memuat...</strong>
+                            <span class="account-email" id="accountEmail">-</span>
+                        </div>
+                        <a href="/src/frontend/pages/profile/account/informations/pribadi.html" class="account-edit">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                    </div>
+                    <div class="account-status">
+                        <div class="status-icon"><i class="fa-solid fa-check"></i></div>
+                        <div class="status-text">
+                            <strong>Akun terverifikasi</strong>
+                            <span>Verifikasi akun berhasil</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STATISTIK -->
+            <section class="account-stats">
+                <div class="stat">
+                    <strong id="statTransaksi">0</strong>
+                    <span>Transaksi</span>
+                </div>
+                <div class="stat">
+                    <strong id="statSaldo">Rp0</strong>
+                    <span>Saldo</span>
+                </div>
+                <div class="stat">
+                    <strong id="statTarget">0</strong>
+                    <span>Target</span>
+                </div>
+            </section>
+
+            <!-- MENU: AKUN -->
+            <section class="menu-section">
+                <div class="section-title">AKUN</div>
+                <div class="menu-card">
+                    <a href="/src/frontend/pages/profile/account/informations/pribadi.html" class="menu-item">
+                        <div class="menu-icon"><i class="fa-regular fa-id-card"></i></div>
+                        <div class="menu-content">
+                            <strong>Informasi pribadi</strong>
+                            <span>Nama, email, nomor telepon</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                    </a>
+                    <a href="/src/frontend/pages/profile/account/security/index.html" class="menu-item">
+                        <div class="menu-icon security"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="menu-content">
+                            <strong>Keamanan</strong>
+                            <span>PIN, perangkat dan keamanan akun</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                    </a>
+                </div>
+            </section>
+
+            <!-- MENU: TABUNGAN -->
+            <section class="menu-section">
+                <div class="section-title">TABUNGAN</div>
+                <div class="menu-card">
+                    <button type="button" class="menu-item" onclick="syncTabungan()">
+                        <div class="menu-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                        <div class="menu-content">
+                            <strong>Sync Tabungan</strong>
+                            <span id="tabunganSyncStatus">Terakhir sync: Belum pernah</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                    </button>
+
+                    <button type="button" class="menu-item" onclick="exportTabungan()">
+                        <div class="menu-icon"><i class="fa-solid fa-download"></i></div>
+                        <div class="menu-content">
+                            <strong>Export Tabungan</strong>
+                            <span id="tabunganExportStatus">Terakhir export: Belum pernah</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                    </button>
+
+                    <button type="button" class="menu-item" onclick="triggerImportTabungan()">
+                        <div class="menu-icon"><i class="fa-solid fa-upload"></i></div>
+                        <div class="menu-content">
+                            <strong>Import Tabungan</strong>
+                            <span id="tabunganImportStatus">Terakhir import: Belum pernah</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                    </button>
+
+                    <button type="button" class="menu-item" onclick="resetTabungan()">
+                        <div class="menu-icon logout"><i class="fa-solid fa-rotate-left"></i></div>
+                        <div class="menu-content">
+                            <strong class="text-danger">Reset Tabungan</strong>
+                            <span>Hapus semua target dan riwayat</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- MENU: PREFERENSI -->
+            <section class="menu-section">
+                <div class="section-title">PREFERENSI</div>
+                <div class="menu-card">
+                    <a href="/src/frontend/pages/profile/more/preferensi/notifikasi.html" class="menu-item">
+                        <div class="menu-icon"><i class="fa-regular fa-bell"></i></div>
+                        <div class="menu-content">
+                            <strong>Notifikasi</strong>
+                            <span>Atur pemberitahuan transaksi</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                    </a>
+                    <a href="/src/frontend/pages/profile/more/preferensi/bahasa.html" class="menu-item">
+                        <div class="menu-icon"><i class="fa-solid fa-language"></i></div>
+                        <div class="menu-content">
+                            <strong>Bahasa</strong>
+                            <span>Bahasa Indonesia</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                    </a>
+                    <a href="/src/frontend/pages/profile/more/preferensi/tampilan.html" class="menu-item">
+                        <div class="menu-icon"><i class="fa-solid fa-circle-half-stroke"></i></div>
+                        <div class="menu-content">
+                            <strong>Tampilan</strong>
+                            <span>Atur tampilan aplikasi</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                    </a>
+                </div>
+            </section>
+
+            <!-- MENU: LAINNYA -->
+            <section class="menu-section">
+                <div class="section-title">LAINNYA</div>
+                <div class="menu-card">
+                    <a href="/src/frontend/pages/profile/more/bantuan.html" class="menu-item">
+                        <div class="menu-icon help"><i class="fa-regular fa-circle-question"></i></div>
+                        <div class="menu-content">
+                            <strong>Pusat bantuan</strong>
+                            <span>Temukan jawaban dan bantuan</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                    </a>
+                    <a href="/src/frontend/pages/profile/more/tentang.html" class="menu-item">
+                        <div class="menu-icon"><i class="fa-solid fa-circle-info"></i></div>
+                        <div class="menu-content">
+                            <strong>Tentang DepTech</strong>
+                            <span>Informasi aplikasi dan kebijakan</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                    </a>
+                </div>
+            </section>
+
+            <!-- LOGOUT -->
+            <section class="menu-section">
+                <div class="menu-card">
+                    <button type="button" class="menu-item" onclick="konfirmasiLogout()">
+                        <div class="menu-icon logout"><i class="fa-solid fa-right-from-bracket"></i></div>
+                        <div class="menu-content">
+                            <strong class="text-danger">Keluar</strong>
+                            <span>Keluar dari akun DepTech</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="profile-footer">
+                <p>DEPTECH</p>
+                <strong>Versi 1.0.0</strong>
+            </footer>
+
+        </main>
+
+        <!-- BOTTOM NAV -->
+        <nav class="bottom-nav">
+            <a href="/index.html">
+                <i class="fa-solid fa-house"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="/src/frontend/pages/activities/index.html">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Aktivitas</span>
+            </a>
+            <a href="/src/frontend/pages/qris.html" class="qr-nav">
+                <div><i class="fa-solid fa-qrcode"></i></div>
+            </a>
+            <a href="/src/frontend/pages/product/index.html">
+                <i class="fa-solid fa-store"></i>
+                <span>Produk</span>
+            </a>
+            <a href="/src/frontend/pages/profile/account/index.html" class="active">
+                <i class="fa-regular fa-user"></i>
+                <span>Profil</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+    <input type="file" id="importTabunganFile" accept=".json" style="display: none;">
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+    <script src="../../../assets/js/store.js"></script>
+    <script src="../../../assets/js/global.js"></script>
+    <script src="../../../assets/js/tabungan.js"></script>
+    <script src="../../../assets/js/avatar.js"></script>
+    <script src="../../../assets/js/deptech-ui.js"></script>
+    <script src="../../../assets/js/deptech-settings.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            renderProfileData();
+        });
+
+        // =====================================================
+        // RENDER DATA PROFIL
+        // =====================================================
+        function renderProfileData() {
+            if (typeof DeptechStore === 'undefined') {
+                console.error('[Profile] DeptechStore tidak ditemukan');
+                return;
+            }
+
+            // USER INFO
+            var user = DeptechStore.getUser();
+
+            var nameEl = document.getElementById('accountName');
+            var emailEl = document.getElementById('accountEmail');
+
+            if (user) {
+                var nama = user.name || 'User';
+                var email = user.email || '';
+
+                if (nameEl) nameEl.textContent = nama;
+                if (emailEl) emailEl.textContent = email;
+                // Avatar di-render otomatis oleh AvatarHelper (data-avatar)
+            } else {
+                if (nameEl) nameEl.textContent = 'Belum Login';
+                if (emailEl) emailEl.textContent = 'Silakan login dulu';
+            }
+
+            // STATISTIK
+            var statTransaksi = document.getElementById('statTransaksi');
+            var statSaldo = document.getElementById('statSaldo');
+            var statTarget = document.getElementById('statTarget');
+
+            var transactions = DeptechStore.getTransactions();
+            if (statTransaksi) {
+                statTransaksi.textContent = transactions.length;
+            }
+
+            var saldo = DeptechStore.getBalance();
+            if (statSaldo) {
+                statSaldo.textContent = formatSaldoShort(saldo);
+            }
+
+            var targets = DeptechStore.getTargets();
+            if (statTarget) {
+                statTarget.textContent = targets.length;
+            }
+        }
+
+        // =====================================================
+        // FORMAT SALDO SINGKAT
+        // =====================================================
+        function formatSaldoShort(saldo) {
+            saldo = Number(saldo) || 0;
+
+            if (saldo === 0) return 'Rp0';
+            if (saldo >= 1000000000) return 'Rp' + (saldo / 1000000000).toFixed(1) + 'M';
+            if (saldo >= 1000000) return 'Rp' + (saldo / 1000000).toFixed(1) + 'Jt';
+            if (saldo >= 1000) return 'Rp' + (saldo / 1000).toFixed(0) + 'K';
+            return 'Rp' + saldo.toLocaleString('id-ID');
+        }
+
+        // =====================================================
+        // LOGOUT
+        // =====================================================
+        function konfirmasiLogout() {
+            if (!confirm('Keluar dari akun DepTech?')) return;
+
+            if (typeof DeptechStore !== 'undefined') {
+                DeptechStore.logActivity({
+                    action: 'logout',
+                    title: 'Logout',
+                    description: 'User keluar dari aplikasi',
+                    icon: 'fa-right-from-bracket',
+                    iconType: 'security'
+                });
+
+                DeptechStore.clearUser();
+            }
+
+            if (typeof showSuccess === 'function') {
+                showSuccess('Berhasil keluar');
+            }
+
+            setTimeout(function () {
+                window.location.href = '../../auth/login.html';
+            }, 800);
+        }
+    </script>
+
+</body>
+
+</html>

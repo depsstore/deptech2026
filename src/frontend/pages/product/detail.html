@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>DepTech — Detail Produk</title>
+
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <!-- Canvas background -->
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="min-h-screen pb-[110px] page-content">
+
+        <!-- NAVBAR BIRU SOLID -->
+        <nav class="navbar-blue">
+            <a href="/index.html" class="brand">
+                <img src="/src/frontend/assets/img/brandnolatar.png" alt="DEPTECH" class="logo-white" onerror="this.style.display='none'">
+                <span class="font-days">
+                    DEP<strong>TECH</strong>
+                </span>
+            </a>
+            <div class="nav-actions">
+                <a href="../notifikasi.html" class="nav-btn">
+                    <i class="fa-regular fa-bell"></i>
+                </a>
+                <a href="../profile/account/index.html" class="nav-btn">
+                    <i class="fa-solid fa-gear"></i>
+                </a>
+            </div>
+        </nav>
+
+        <!-- IMAGE SLIDER -->
+        <section class="product-images" id="productSlider">
+            <div class="slider-container" id="sliderContainer">
+                <div class="slide" data-slide="0">
+                    <div class="detail-image-container" id="slideImage0">
+                        <i class="fa-solid fa-box product-icon"></i>
+                    </div>
+                </div>
+                <div class="slide" data-slide="1">
+                    <div class="detail-image-container" id="slideImage1">
+                        <i class="fa-solid fa-box product-icon"></i>
+                    </div>
+                </div>
+                <div class="slide" data-slide="2">
+                    <div class="detail-image-container" id="slideImage2">
+                        <i class="fa-solid fa-box product-icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <button class="slide-arrow prev" id="prevSlide">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button class="slide-arrow next" id="nextSlide">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+            <div class="slider-dots" id="sliderDots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+            </div>
+        </section>
+
+        <!-- PRODUCT INFO -->
+        <section class="product-info-section">
+            <span class="product-tag" id="productTag">Memuat...</span>
+            <h1 class="product-name" id="productName">Memuat produk...</h1>
+            <div class="product-price" id="productPrice">Rp 0</div>
+            <div class="product-rating" id="productRating"></div>
+        </section>
+
+        <!-- DESCRIPTION -->
+        <section class="desc-section">
+            <div class="desc-title">Deskripsi Produk</div>
+            <div class="desc-text" id="descText">Memuat deskripsi...</div>
+        </section>
+
+        <!-- RECOMMENDATION -->
+        <section class="rec-section">
+            <div class="rec-title">Produk Rekomendasi</div>
+            <div class="rec-grid" id="recGrid">
+                <div class="col-span-full text-center py-10 text-[#6b8bb0] text-sm">Memuat...</div>
+            </div>
+        </section>
+
+        <!-- BOTTOM ACTION -->
+        <div class="product-actions">
+            <button class="action-btn cart" onclick="addToCart()">
+                <i class="fa-solid fa-cart-plus"></i><br>
+                <span class="sub">Tambah</span>
+            </button>
+            <button class="action-btn buy" onclick="buyNow()">
+                Beli Sekarang
+                <span class="sub">Gratis Ongkir</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+        <!-- ========== FRONTEND ASSETS ========== -->
+    <script src="../../assets/js/global.js"></script>
+    <script src="../../assets/js/deptech-ui.js"></script>
+    <script src="../../assets/js/deptech-settings.js"></script>
+    <script src="../../assets/js/store.js"></script>
+
+    <!-- ========== PRODUCTS API ========== -->
+    <script src="../../assets/js/products.js"></script>
+
+    <!-- ========== PAGE SCRIPT ========== -->
+    <script src="../../assets/js/product-detail-page.js"></script>
+
+    <script>
+    window.DEPTECH_API_BASE = 'https://apiserverdepsstore.vercel.app/api/v2';
+    </script>
+
+</body>
+
+</html>

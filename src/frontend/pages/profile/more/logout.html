@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Title Default -->
+    <title>DepTech</title>
+
+    <!-- Theme Color (Light & Dark) -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <!-- Framework & Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="edit-profile-page page-content">
+
+        <header class="edit-profile-header">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <h1>Keluar</h1>
+        </header>
+
+        <div class="edit-profile-container">
+
+            <div class="card-profile" style="text-align: center; padding: 32px 24px;">
+                <div style="font-size: 56px; color: var(--danger); margin-bottom: 12px;">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </div>
+                <div style="font-size: 18px; font-weight: 700; color: var(--text-primary);">Keluar dari Akun?</div>
+                <div style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">
+                    Anda akan keluar dari akun DepTech dan perlu login kembali untuk mengakses layanan.
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 24px;">
+                    <button class="btn-modal-cancel" style="flex: 1;" onclick="window.location.href='index.html'">Batal</button>
+                    <button class="btn-modal-save" style="flex: 1; background: var(--danger);" onclick="confirmLogout()">Keluar</button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="../../../assets/js/global.js"></script>
+    <script src="../../../assets/js/deptech-ui.js"></script>
+    <script src="../../../assets/js/deptech-settings.js"></script>
+    <script>
+        function confirmLogout() {
+            showToast('Berhasil keluar dari akun');
+            setTimeout(function () { window.location.href = '../../auth/login.html'; }, 1500);
+        }
+    </script>
+
+</body>
+
+</html>

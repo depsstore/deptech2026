@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>DepTech — Produk</title>
+
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <!-- Canvas background -->
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="min-h-screen pb-[90px] page-content">
+
+        <!-- NAVBAR BIRU SOLID -->
+        <nav class="navbar-blue">
+            <a href="/index.html" class="brand">
+                <img src="/src/frontend/assets/img/brandnolatar.png" alt="DEPTECH" class="logo-white" onerror="this.style.display='none'">
+                <span class="font-days">
+                    DEP<strong>TECH</strong>
+                </span>
+            </a>
+            <div class="nav-actions">
+                <a href="../notifikasi.html" class="nav-btn">
+                    <i class="fa-regular fa-bell"></i>
+                </a>
+                <a href="../profile/account/index.html" class="nav-btn">
+                    <i class="fa-solid fa-gear"></i>
+                </a>
+            </div>
+        </nav>
+
+        <!-- HEADER PRODUK (Search) -->
+        <header class="max-w-7xl mx-auto px-4 sm:px-8 pt-5 pb-3">
+            <div class="flex items-center gap-2.5 bg-white rounded-xl px-3.5 h-10 shadow-[0_4px_16px_rgba(37,99,235,0.06)] border border-blue-100/15 transition focus-within:shadow-[0_0_0_2px_rgba(37,99,235,.15)]">
+                <i class="text-[14px] text-[#6b8bb0] fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Cari produk di sini..." class="flex-1 border-0 outline-0 bg-transparent text-[11px] text-[#1a2744] placeholder:text-[#aab1bc]">
+                <button class="bg-transparent text-[#4b6a8b] text-[14px] pl-2.5 border-l border-[#e4edf7]">
+                    <i class="fa-solid fa-sliders"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- CATEGORY TABS -->
+        <div class="category-tabs">
+            <div class="tabs" id="categoryTabs">
+                <button class="tab-active px-4 py-1.5 rounded-full bg-transparent text-[10px] font-semibold text-[#4b6a8b] transition active:scale-95" data-category="all" onclick="filterCategory(this, 'all')">Semua</button>
+                <button class="px-4 py-1.5 rounded-full bg-transparent text-[10px] font-semibold text-[#4b6a8b] transition active:scale-95" data-category="elektronik" onclick="filterCategory(this, 'elektronik')">Elektronik</button>
+                <button class="px-4 py-1.5 rounded-full bg-transparent text-[10px] font-semibold text-[#4b6a8b] transition active:scale-95" data-category="gadget" onclick="filterCategory(this, 'gadget')">Gadget</button>
+                <button class="px-4 py-1.5 rounded-full bg-transparent text-[10px] font-semibold text-[#4b6a8b] transition active:scale-95" data-category="aksesoris" onclick="filterCategory(this, 'aksesoris')">Aksesoris</button>
+                <button class="px-4 py-1.5 rounded-full bg-transparent text-[10px] font-semibold text-[#4b6a8b] transition active:scale-95" data-category="rumah" onclick="filterCategory(this, 'rumah')">Rumah</button>
+                <button class="px-4 py-1.5 rounded-full bg-transparent text-[10px] font-semibold text-[#4b6a8b] transition active:scale-95" data-category="fashion" onclick="filterCategory(this, 'fashion')">Fashion</button>
+            </div>
+        </div>
+
+        <!-- TOOLBAR -->
+        <div class="flex items-center justify-between px-4 sm:px-8 py-3 bg-white border-b border-[#e4edf7]">
+            <span class="text-[10px] text-[#4b6a8b]"><strong id="totalCount" class="text-[#1a2744] font-bold">0</strong> produk</span>
+            <div class="flex gap-1" id="sortOptions">
+                <button class="sort-active px-2.5 py-1 rounded-md bg-transparent text-[9px] font-semibold text-[#4b6a8b] transition active:scale-95" data-sort="relevan" onclick="sortProducts(this, 'relevan')">Relevan</button>
+                <button class="px-2.5 py-1 rounded-md bg-transparent text-[9px] font-semibold text-[#4b6a8b] transition active:scale-95" data-sort="termurah" onclick="sortProducts(this, 'termurah')">Termurah</button>
+                <button class="px-2.5 py-1 rounded-md bg-transparent text-[9px] font-semibold text-[#4b6a8b] transition active:scale-95" data-sort="termahal" onclick="sortProducts(this, 'termahal')">Termahal</button>
+            </div>
+        </div>
+
+        <!-- PRODUCT GRID (kosong — diisi JS) -->
+        <div class="product-grid" id="productGrid">
+            <div class="col-span-full text-center py-[60px] text-[#6b8bb0]">
+                <div class="loading-spinner mx-auto"></div>
+                <p class="mt-3 text-[11px]">Memuat produk...</p>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAV -->
+        <nav class="bottom-nav">
+            <a href="/index.html">
+                <i class="fa-solid fa-house"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="/src/frontend/pages/activities/index.html">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Aktivitas</span>
+            </a>
+            <a href="/src/frontend/pages/qris.html" class="qr-nav">
+                <div><i class="fa-solid fa-qrcode"></i></div>
+            </a>
+            <a href="/src/frontend/pages/product/index.html" class="active">
+                <i class="fa-solid fa-store"></i>
+                <span>Produk</span>
+            </a>
+            <a href="/src/frontend/pages/profile/account/index.html">
+                <i class="fa-regular fa-user"></i>
+                <span>Profil</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+        <!-- ========== FRONTEND ASSETS ========== -->
+    <script src="../../assets/js/global.js"></script>
+    <script src="../../assets/js/deptech-ui.js"></script>
+    <script src="../../assets/js/deptech-settings.js"></script>
+    <script src="../../assets/js/store.js"></script>
+
+    <!-- ========== PRODUCTS API ========== -->
+    <script src="../../assets/js/products.js"></script>
+
+    <!-- ========== PAGE SCRIPT ========== -->
+    <script src="../../assets/js/product-page.js"></script>
+
+    <script>
+    window.DEPTECH_API_BASE = 'https://apiserverdepsstore.vercel.app/api/v2';
+    </script>
+
+</body>
+
+</html>

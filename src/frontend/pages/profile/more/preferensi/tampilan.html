@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Title Default -->
+    <title>DepTech</title>
+
+    <!-- Theme Color (Light & Dark) -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <!-- Framework & Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <!-- Canvas background -->
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="min-h-screen pb-[90px] page-content">
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+        <header class="edit-profile-header">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <h1>Tampilan</h1>
+        </header>
+
+        <!-- =====================================================
+             MAIN
+        ====================================================== -->
+        <main class="edit-profile-container">
+
+            <!-- ===== DARK MODE ===== -->
+            <div class="settings-card">
+                <div class="settings-item" onclick="toggleDarkMode(this.querySelector('.toggle-switch'))">
+                    <div class="item-icon">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-title">Mode Gelap</div>
+                        <div class="item-sub">Ubah tema menjadi gelap</div>
+                    </div>
+                    <div class="toggle-switch" id="darkModeToggle">
+                        <div class="toggle-knob"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== UKURAN FONT ===== -->
+            <div class="settings-card mt-3">
+                <div class="settings-item">
+                    <div class="item-icon">
+                        <i class="fa-solid fa-text-height"></i>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-title">Ukuran Font</div>
+                        <div class="item-sub">Sesuaikan ukuran teks</div>
+                    </div>
+                    <select class="font-size-select" id="fontSize" onchange="ubahFontSize()">
+                        <option value="kecil">Kecil</option>
+                        <option value="sedang" selected>Sedang</option>
+                        <option value="besar">Besar</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ===== WARNA AKSEN ===== -->
+            <div class="settings-card mt-3">
+                <div class="settings-item" onclick="navigateTo('aksen.html')">
+                    <div class="item-icon">
+                        <i class="fa-solid fa-palette"></i>
+                    </div>
+                    <div class="item-content">
+                        <div class="item-title">Warna Aksen</div>
+                        <div class="item-sub">Sesuaikan warna tema aplikasi</div>
+                    </div>
+                    <div class="item-value">
+                        <span id="previewColor" class="preview-color-dot"></span>
+                    </div>
+                    <div class="item-arrow">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+
+        <!-- =====================================================
+             BOTTOM NAV
+        ====================================================== -->
+        <nav class="bottom-nav">
+            <a href="/index.html" class="active">
+                <i class="fa-solid fa-house"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="/src/frontend/pages/activities/index.html">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Aktivitas</span>
+            </a>
+            <a href="/src/frontend/pages/qris.html" class="qr-nav">
+                <div><i class="fa-solid fa-qrcode"></i></div>
+            </a>
+            <a href="/src/frontend/pages/product/index.html">
+                <i class="fa-solid fa-store"></i>
+                <span>Produk</span>
+            </a>
+            <a href="/src/frontend/pages/profile/account/index.html">
+                <i class="fa-regular fa-user"></i>
+                <span>Profil</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+    <script src="../../../../assets/js/global.js"></script>
+    <script src="../../../../assets/js/deptech-ui.js"></script>
+    <script src="../../../../assets/js/deptech-settings.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Init dark mode toggle
+            var darkToggle = document.getElementById('darkModeToggle');
+            if (darkToggle) {
+                var isDark = localStorage.getItem('deptech_darkmode') === 'true';
+                if (isDark) darkToggle.classList.add('active');
+            }
+
+            // Init font size select
+            var fontSelect = document.getElementById('fontSize');
+            if (fontSelect) {
+                var savedSize = localStorage.getItem('deptech_fontsize') || 'sedang';
+                fontSelect.value = savedSize;
+            }
+        });
+    </script>
+
+</body>
+
+</html>

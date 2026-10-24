@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>DepTech</title>
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <!-- Framework & Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="min-h-screen pb-[90px] page-content">
+
+        <!-- =====================================================
+             NAVBAR
+        ====================================================== -->
+        <nav class="navbar-blue">
+            <a href="/index.html" class="brand">
+                <img src="/src/frontend/assets/img/brandnolatar.png" alt="DEPTECH" class="logo-white" onerror="this.style.display='none'">
+                <span class="font-days">DEP<strong>TECH</strong></span>
+            </a>
+            <div class="nav-actions">
+                <a href="/src/frontend/pages/notifikasi.html" class="nav-btn">
+                    <i class="fa-regular fa-bell"></i>
+                </a>
+                <a href="/src/frontend/pages/profile/account/index.html" class="nav-btn">
+                    <i class="fa-solid fa-gear"></i>
+                </a>
+            </div>
+        </nav>
+
+        <!-- =====================================================
+             MAIN
+        ====================================================== -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-8 pt-5 space-y-5">
+
+            <!-- ===== SALDO UTAMA ===== -->
+            <section class="balance-card-new simple">
+                <div class="card-label">
+                    <span class="card-label-left">
+                        <i class="fa-solid fa-wallet"></i> Total Saldo
+                    </span>
+                    <button class="eye-btn" data-eye="main">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+                <div class="card-value" data-value="main" id="balanceValue">Rp0</div>
+                <div class="card-sub">
+                    <span class="dot"></span> Saldo + tabungan
+                </div>
+                <div class="card-actions">
+                    <button class="card-action primary" onclick="navigateTo('/src/frontend/pages/goals/index.html')">
+                        <i class="fa-solid fa-piggy-bank"></i> Nabung
+                    </button>
+                    <button class="card-action secondary" onclick="navigateTo('/src/frontend/pages/activities/index.html')">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Riwayat
+                    </button>
+                </div>
+            </section>
+
+            <!-- ===== QUICK MENU ===== -->
+            <section class="quick-menu">
+                <div class="quick-menu-grid">
+
+                    <a href="/src/frontend/pages/qris.html" class="quick-menu-item">
+                        <div class="quick-menu-icon"><i class="fa-solid fa-qrcode"></i></div>
+                        <span>QRIS</span>
+                    </a>
+
+                    <a href="#" class="quick-menu-item" onclick="event.preventDefault();openKirim()">
+                        <div class="quick-menu-icon"><i class="fa-solid fa-paper-plane"></i></div>
+                        <span>Kirim</span>
+                    </a>
+
+                    <a href="#" class="quick-menu-item" onclick="event.preventDefault();openTopUp()">
+                        <div class="quick-menu-icon"><i class="fa-solid fa-wallet"></i></div>
+                        <span>Top Up</span>
+                    </a>
+
+                    <a href="/src/frontend/pages/activities/index.html" class="quick-menu-item">
+                        <div class="quick-menu-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                        <span>Riwayat</span>
+                    </a>
+
+                    <a href="/src/frontend/pages/goals/index.html" class="quick-menu-item">
+                        <div class="quick-menu-icon"><i class="fa-solid fa-bullseye"></i></div>
+                        <span>Target</span>
+                    </a>
+
+                    <a href="/src/frontend/pages/product/index.html" class="quick-menu-item">
+                        <div class="quick-menu-icon"><i class="fa-solid fa-store"></i></div>
+                        <span>Produk</span>
+                    </a>
+
+                    <a href="/src/frontend/pages/promo.html" class="quick-menu-item">
+                        <div class="quick-menu-icon"><i class="fa-solid fa-tag"></i></div>
+                        <span>Promo</span>
+                    </a>
+
+                    <a href="/src/frontend/pages/profile/account/index.html" class="quick-menu-item">
+                        <div class="quick-menu-icon"><i class="fa-solid fa-ellipsis"></i></div>
+                        <span>Lainnya</span>
+                    </a>
+
+                </div>
+            </section>
+
+            <!-- ===== IKLAN BERG ERAK ===== -->
+            <section>
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-base font-bold tracking-tight">Info DepTech</h2>
+                    <div class="carousel-dots" id="carouselDots"></div>
+                </div>
+
+                <div class="carousel-wrapper">
+                    <div class="carousel-track" id="carouselTrack">
+
+                        <div class="carousel-slide" onclick="navigateTo('/src/frontend/pages/goals/index.html')">
+                            <div class="slide-bg slide-bg-blue"></div>
+                            <div class="slide-content">
+                                <div class="slide-badge badge-blue">
+                                    <i class="fa-solid fa-bullseye"></i> Fitur
+                                </div>
+                                <div class="slide-title">Nabung target impianmu</div>
+                                <div class="slide-desc">Bikin target, nabung sedikit-sedikit, lihat progresnya tiap hari.</div>
+                                <button class="slide-btn btn-blue">Coba Sekarang</button>
+                            </div>
+                        </div>
+
+                        <div class="carousel-slide" onclick="navigateTo('/src/frontend/pages/product/index.html')">
+                            <div class="slide-bg slide-bg-purple"></div>
+                            <div class="slide-content">
+                                <div class="slide-badge badge-purple">
+                                    <i class="fa-solid fa-store"></i> Baru
+                                </div>
+                                <div class="slide-title">Belanja produk digital</div>
+                                <div class="slide-desc">Laptop, HP, aksesoris, dan gadget lain langsung dari DepTech.</div>
+                                <button class="slide-btn btn-purple">Lihat Produk</button>
+                            </div>
+                        </div>
+
+                        <div class="carousel-slide" onclick="navigateTo('/src/frontend/pages/qris.html')">
+                            <div class="slide-bg slide-bg-green"></div>
+                            <div class="slide-content">
+                                <div class="slide-badge badge-green">
+                                    <i class="fa-solid fa-qrcode"></i> Praktis
+                                </div>
+                                <div class="slide-title">Bayar pakai QRIS</div>
+                                <div class="slide-desc">Scan QR dari merchant mana saja, bayar langsung dari DepTech.</div>
+                                <button class="slide-btn btn-green">Scan QR</button>
+                            </div>
+                        </div>
+
+                        <div class="carousel-slide" onclick="navigateTo('/src/frontend/pages/profile/account/security/index.html')">
+                            <div class="slide-bg slide-bg-orange"></div>
+                            <div class="slide-content">
+                                <div class="slide-badge badge-orange">
+                                    <i class="fa-solid fa-shield-halved"></i> Aman
+                                </div>
+                                <div class="slide-title">Data kamu terlindungi</div>
+                                <div class="slide-desc">PIN, verifikasi 2 langkah, dan riwayat login untuk keamanan akun.</div>
+                                <button class="slide-btn btn-orange">Atur Keamanan</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== TRANSAKSI TERBARU ===== -->
+            <section>
+                <div class="flex items-center justify-between mb-3">
+                    <h2 class="text-base font-bold tracking-tight">Transaksi terbaru</h2>
+                    <button class="bg-transparent text-[#2563eb] text-[10px] font-bold" onclick="navigateTo('/src/frontend/pages/activities/index.html')">
+                        Lihat semua
+                    </button>
+                </div>
+
+                <div class="flex flex-col gap-2" id="transactionList">
+                    <!-- Di-render dari JS -->
+                </div>
+            </section>
+
+        </main>
+
+        <!-- =====================================================
+             BOTTOM NAV
+        ====================================================== -->
+        <nav class="bottom-nav">
+            <a href="/index.html" class="active">
+                <i class="fa-solid fa-house"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="/src/frontend/pages/activities/index.html">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Aktivitas</span>
+            </a>
+            <a href="/src/frontend/pages/qris.html" class="qr-nav">
+                <div><i class="fa-solid fa-qrcode"></i></div>
+            </a>
+            <a href="/src/frontend/pages/product/index.html">
+                <i class="fa-solid fa-store"></i>
+                <span>Produk</span>
+            </a>
+            <a href="/src/frontend/pages/profile/account/index.html">
+                <i class="fa-regular fa-user"></i>
+                <span>Profil</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <!-- =====================================================
+         MODAL: TOP UP
+    ====================================================== -->
+    <div class="modal-backdrop" id="topUpModal">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h2>Top Up Saldo</h2>
+                <button class="modal-close" onclick="closeTopUp()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nominal</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">Rp</span>
+                        <input type="number" id="topUpAmount" placeholder="0">
+                    </div>
+                    <div class="helper-text">Minimal Rp10.000</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" onclick="closeTopUp()">Batal</button>
+                <button class="btn-modal-save" onclick="submitTopUp()">Top Up</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL: KIRIM
+    ====================================================== -->
+    <div class="modal-backdrop" id="kirimModal">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <div class="modal-header">
+                <h2>Kirim Uang</h2>
+                <button class="modal-close" onclick="closeKirim()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Penerima</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" id="kirimTo" placeholder="Nama penerima">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Nominal</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon">Rp</span>
+                        <input type="number" id="kirimAmount" placeholder="0">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" onclick="closeKirim()">Batal</button>
+                <button class="btn-modal-save" onclick="submitKirim()">Kirim</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+    <script src="/src/frontend/assets/js/store.js"></script>
+    <script src="/src/frontend/assets/js/global.js"></script>
+    <script src="/src/frontend/assets/js/deptech-ui.js"></script>
+    <script src="/src/frontend/assets/js/deptech-settings.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // =====================================================
+            // RENDER BALANCE
+            // =====================================================
+            function renderBalance() {
+                var el = document.getElementById('balanceValue');
+                if (!el) return;
+                var balance = DeptechStore.getTotalBalance();
+                el.textContent = 'Rp' + Number(balance).toLocaleString('id-ID');
+                el.dataset.original = el.textContent;
+            }
+
+            // =====================================================
+            // RENDER TRANSAKSI TERBARU
+            // =====================================================
+            function renderTransactions() {
+                var container = document.getElementById('transactionList');
+                if (!container) return;
+
+                var transactions = DeptechStore.getTransactions();
+
+                transactions.sort(function(a, b) {
+                    return new Date(b.date) - new Date(a.date);
+                });
+                transactions = transactions.slice(0, 3);
+
+                if (transactions.length === 0) {
+                    container.innerHTML =
+                        '<div class="empty-state">' +
+                        '<i class="fa-regular fa-folder-open"></i>' +
+                        '<h3>Belum ada transaksi</h3>' +
+                        '<p>Transaksi kamu akan muncul di sini.</p>' +
+                        '</div>';
+                    return;
+                }
+
+                var html = '';
+
+                transactions.forEach(function(t) {
+                    var isIncome = t.type === 'income';
+                    var icon = isIncome ? 'fa-arrow-down' : 'fa-cart-shopping';
+                    var sign = isIncome ? '+' : '-';
+                    var cls = isIncome ? 'in' : 'out';
+                    var iconClass = isIncome ? 'income-icon' : '';
+
+                    var timeStr = new Date(t.date).toLocaleTimeString('id-ID', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    html +=
+                        '<div class="activity-card">' +
+                        '<div class="activity-icon ' + iconClass + '">' +
+                        '<i class="fa-solid ' + icon + '"></i>' +
+                        '</div>' +
+                        '<div class="activity-info">' +
+                        '<strong class="activity-name">' + (t.description || 'Transaksi') + '</strong>' +
+                        '<span class="activity-time">' + timeStr + ' · ' + (t.category || 'lainnya') + '</span>' +
+                        '</div>' +
+                        '<strong class="activity-amount ' + cls + '">' +
+                        sign + 'Rp' + Number(t.amount).toLocaleString('id-ID') +
+                        '</strong>' +
+                        '</div>';
+                });
+
+                container.innerHTML = html;
+            }
+
+            // =====================================================
+            // TOP UP
+            // =====================================================
+            window.openTopUp = function() {
+                document.getElementById('topUpAmount').value = '';
+                openModal('topUpModal');
+            };
+
+            window.closeTopUp = function() {
+                closeModal('topUpModal');
+            };
+
+            window.submitTopUp = function() {
+                var amount = parseInt(document.getElementById('topUpAmount').value) || 0;
+
+                if (amount < 10000) {
+                    showError('Minimal top up Rp10.000');
+                    return;
+                }
+
+                DeptechStore.addTransaction({
+                    type: 'income',
+                    amount: amount,
+                    description: 'Top Up Saldo',
+                    category: 'topup'
+                });
+
+                showSuccess('Top Up Rp' + amount.toLocaleString('id-ID') + ' berhasil!');
+                closeTopUp();
+                renderBalance();
+                renderTransactions();
+            };
+
+            // =====================================================
+            // KIRIM
+            // =====================================================
+            window.openKirim = function() {
+                document.getElementById('kirimTo').value = '';
+                document.getElementById('kirimAmount').value = '';
+                openModal('kirimModal');
+            };
+
+            window.closeKirim = function() {
+                closeModal('kirimModal');
+            };
+
+            window.submitKirim = function() {
+                var to = document.getElementById('kirimTo').value.trim();
+                var amount = parseInt(document.getElementById('kirimAmount').value) || 0;
+
+                if (!to) {
+                    showError('Nama penerima wajib diisi!');
+                    return;
+                }
+                if (amount <= 0) {
+                    showError('Nominal tidak valid!');
+                    return;
+                }
+
+                var balance = DeptechStore.getBalance();
+                if (balance < amount) {
+                    showError('Saldo tidak mencukupi!');
+                    return;
+                }
+
+                DeptechStore.addTransaction({
+                    type: 'expense',
+                    amount: amount,
+                    description: 'Kirim ke ' + to,
+                    category: 'transfer'
+                });
+
+                showSuccess('Berhasil kirim Rp' + amount.toLocaleString('id-ID') + ' ke ' + to);
+                closeKirim();
+                renderBalance();
+                renderTransactions();
+            };
+
+            // =====================================================
+            // INIT
+            // =====================================================
+            renderBalance();
+            renderTransactions();
+
+        });
+    </script>
+
+</body>
+
+</html>

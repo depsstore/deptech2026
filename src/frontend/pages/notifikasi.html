@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Title Default -->
+    <title>DepTech</title>
+
+    <!-- Theme Color (Light & Dark) -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <!-- Framework & Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <!-- Canvas background -->
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="min-h-screen pb-[90px] page-content">
+
+        <!-- =====================================================
+             NAVBAR BIRU SOLID
+        ====================================================== -->
+        <nav class="navbar-blue">
+            <a href="/index.html" class="brand">
+                <img src="../assets/img/brandnolatar.png" alt="DEPTECH" class="logo-white" onerror="this.style.display='none'">
+                <span class="font-days">
+                    DEP<strong>TECH</strong>
+                </span>
+            </a>
+            <div class="nav-actions">
+                <a href="../pages/notifikasi.html" class="nav-btn">
+                    <i class="fa-regular fa-bell"></i>
+                </a>
+                <a href="../pages/profile/account/index.html" class="nav-btn">
+                    <i class="fa-solid fa-gear"></i>
+                </a>
+            </div>
+        </nav>
+
+        <!-- =====================================================
+             MAIN
+        ====================================================== -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-8 pt-5">
+
+            <!-- ===== HEADER SECTION ===== -->
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="text-base font-bold tracking-tight">Notifikasi</h2>
+                <span class="item-badge" id="notifCount">3 baru</span>
+            </div>
+
+            <!-- ===== LIST NOTIFIKASI ===== -->
+            <div class="settings-card" id="notifList">
+                <!-- Data dari JS -->
+            </div>
+
+        </main>
+        <nav class="bottom-nav">
+            <a href="/index.html" class="active">
+                <i class="fa-solid fa-house"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="/src/frontend/pages/activities/index.html">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Aktivitas</span>
+            </a>
+            <a href="/src/frontend/pages/qris.html" class="qr-nav">
+                <div><i class="fa-solid fa-qrcode"></i></div>
+            </a>
+            <a href="/src/frontend/pages/product/index.html">
+                <i class="fa-solid fa-store"></i>
+                <span>Produk</span>
+            </a>
+            <a href="/src/frontend/pages/profile/account/index.html">
+                <i class="fa-regular fa-user"></i>
+                <span>Profil</span>
+            </a>
+        </nav>
+
+    </div>
+
+       <script src="../assets/js/store.js"></script>
+    <script src="../assets/js/global.js"></script>
+    <script src="../assets/js/deptech-ui.js"></script>
+    <script src="../assets/js/deptech-settings.js"></script>
+    <script src="../assets/js/shared-helpers.js"></script>
+    <script src="../assets/js/notifikasi.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            var container = document.getElementById('notifList');
+            var badge = document.getElementById('notifCount');
+            if (!container) return;
+
+            function render() {
+                var notifs = NotifStore.generateAll();
+
+                if (notifs.length === 0) {
+                    container.innerHTML =
+                        '<div class="history-empty">' +
+                        '<i class="fa-regular fa-bell-slash"></i>' +
+                        '<p>Belum ada notifikasi</p>' +
+                        '</div>';
+                    if (badge) badge.textContent = '0 baru';
+                    return;
+                }
+
+                var html = '';
+                notifs.forEach(function(n) {
+                    var unreadClass = n.unread ? ' unread' : '';
+                    html +=
+                        '<div class="settings-item notif-item' + unreadClass + '" data-id="' + n.id + '">' +
+                        '<div class="item-icon notif-icon ' + n.iconType + '">' +
+                        '<i class="fa-solid ' + n.icon + '"></i>' +
+                        '</div>' +
+                        '<div class="item-content">' +
+                        '<div class="item-title">' + n.title + '</div>' +
+                        '<div class="item-sub">' + n.message + '</div>' +
+                        '<div class="item-time">' + NotifStore.formatRelative(n.date) + '</div>' +
+                        '</div>' +
+                        (n.unread ? '<span class="status-dot"></span>' : '') +
+                        '</div>';
+                });
+                container.innerHTML = html;
+
+                if (badge) badge.textContent = NotifStore.countUnread() + ' baru';
+
+                // Klik → mark as read
+                container.querySelectorAll('.notif-item.unread').forEach(function(item) {
+                    item.addEventListener('click', function() {
+                        NotifStore.markAsRead(this.dataset.id);
+                        render();
+                    });
+                });
+            }
+
+            render();
+
+            // Tombol "tandai semua dibaca" (tombol ke-2 dari kiri)
+            var markAllBtn = document.getElementById('markAllBtn');
+            if (markAllBtn) {
+                markAllBtn.addEventListener('click', function() {
+                    NotifStore.markAllAsRead();
+                    render();
+                    if (typeof showToast === 'function') showToast('Semua notifikasi ditandai dibaca');
+                });
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>

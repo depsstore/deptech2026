@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Title Default -->
+    <title>DepTech</title>
+
+    <!-- Theme Color (Light & Dark) -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <!-- Framework & Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="edit-profile-page page-content">
+
+        <header class="edit-profile-header">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <h1>Verifikasi 2 Langkah</h1>
+        </header>
+
+        <div class="edit-profile-container">
+            <div class="card-profile">
+
+                <div style="text-align: center; padding: 10px 0 20px;">
+                    <div style="font-size: 48px; color: var(--accent); margin-bottom: 12px;">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h2 style="font-size: 18px; font-weight: 700; color: var(--text-primary);">Verifikasi 2 Langkah</h2>
+                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+                        Tambahkan lapisan keamanan ekstra untuk akun Anda
+                    </p>
+                </div>
+
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-soft);">
+                    <div>
+                        <div style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Status</div>
+                        <div style="font-size: 11px; color: var(--text-muted);">Perlindungan akun dengan 2 langkah</div>
+                    </div>
+                    <span id="status2FA" style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Nonaktif</span>
+                </div>
+
+                <div style="padding: 12px 0;">
+                    <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">Metode Verifikasi</div>
+                    <button class="settings-item" style="padding: 10px 0; border: 0; background: transparent;">
+                        <div class="item-icon"><i class="fa-solid fa-message"></i></div>
+                        <div class="item-content">
+                            <div class="item-title">SMS</div>
+                            <div class="item-sub">Kirim kode verifikasi via SMS</div>
+                        </div>
+                        <i class="fa-regular fa-circle item-arrow"></i>
+                    </button>
+                    <button class="settings-item" style="padding: 10px 0; border: 0; background: transparent;">
+                        <div class="item-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                        <div class="item-content">
+                            <div class="item-title">Aplikasi Authenticator</div>
+                            <div class="item-sub">Google Authenticator, Microsoft Authenticator</div>
+                        </div>
+                        <i class="fa-regular fa-circle item-arrow"></i>
+                    </button>
+                </div>
+
+                <button class="btn-simpan" id="btnToggle2FA" onclick="aktivasi2Langkah()">Aktifkan Verifikasi 2 Langkah</button>
+
+                <div class="helper-text" style="text-align: center; margin-top: 8px;">
+                    Dengan mengaktifkan, Anda akan memerlukan kode verifikasi setiap login
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="../../../../assets/js/store.js"></script>
+    <script src="../../../../assets/js/global.js"></script>
+    <script src="../../../../assets/js/deptech-ui.js"></script>
+    <script src="../../../../assets/js/deptech-settings.js"></script>
+    <script>
+        var KEY_2FA = 'deptech_2fa';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUI();
+        });
+
+        function updateUI() {
+            var isActive = localStorage.getItem(KEY_2FA) === 'true';
+            var statusEl = document.getElementById('status2FA');
+            var btnEl = document.getElementById('btnToggle2FA');
+
+            if (statusEl) {
+                statusEl.textContent = isActive ? 'Aktif' : 'Nonaktif';
+                statusEl.style.color = isActive ? 'var(--success)' : 'var(--text-muted)';
+            }
+            if (btnEl) {
+                btnEl.textContent = isActive ? 'Matikan Verifikasi 2 Langkah' : 'Aktifkan Verifikasi 2 Langkah';
+            }
+        }
+
+        function aktivasi2Langkah() {
+            var current = localStorage.getItem(KEY_2FA) === 'true';
+
+            if (current) {
+                if (!confirm('Matikan verifikasi 2 langkah?')) return;
+                localStorage.setItem(KEY_2FA, 'false');
+                showToast('Verifikasi 2 langkah dimatikan');
+            } else {
+                if (!confirm('Aktifkan verifikasi 2 langkah untuk akun Anda?')) return;
+                localStorage.setItem(KEY_2FA, 'true');
+
+                if (typeof DeptechStore !== 'undefined' && typeof DeptechStore.logActivity === 'function') {
+                    DeptechStore.logActivity({
+                        action: 'enable_2fa',
+                        title: 'Verifikasi 2 Langkah Diaktifkan',
+                        description: 'Keamanan akun ditingkatkan dengan 2FA',
+                        icon: 'fa-shield-halved',
+                        iconType: 'security'
+                    });
+                }
+
+                showToast('Verifikasi 2 langkah berhasil diaktifkan!');
+            }
+
+            updateUI();
+        }
+    </script>
+
+</body>
+
+</html>

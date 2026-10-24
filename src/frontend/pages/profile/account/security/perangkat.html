@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>DepTech</title>
+
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="edit-profile-page page-content">
+
+        <header class="edit-profile-header">
+            <button class="back-btn" onclick="window.location.href='/src/frontend/pages/profile/account/security/index.html'">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <h1>Perangkat Terdaftar</h1>
+        </header>
+
+        <div class="edit-profile-container">
+
+            <div class="security-card">
+                <div class="security-header">
+                    <div class="security-title">Perangkat Terdaftar</div>
+                    <div class="security-sub">Kelola perangkat yang terhubung dengan akun Anda</div>
+                </div>
+
+                <div class="security-body" id="deviceList">
+                    <div style="padding:40px 20px;text-align:center;color:var(--text-muted);">
+                        <i class="fa-solid fa-circle-notch fa-spin" style="font-size:24px;"></i>
+                        <p style="margin-top:10px;font-size:12px;">Memuat perangkat...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="summaryBar" style="display:none;margin-top:16px;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg-card);border-radius:12px;border:1px solid var(--border-base);gap:8px;flex-wrap:wrap;">
+                <span style="font-size:12px;color:var(--text-muted);" id="deviceCount">
+                    <i class="fa-solid fa-circle-info" style="margin-right:4px;"></i> 0 perangkat
+                </span>
+                <button id="btnLogoutAll" style="background:transparent;color:var(--danger);font-size:11px;font-weight:600;border:none;cursor:pointer;padding:6px 12px;border-radius:8px;transition:background .2s;">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout Semua
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="../../../../assets/js/store.js"></script>
+    <script src="../../../../assets/js/global.js"></script>
+    <script src="../../../../assets/js/deptech-ui.js"></script>
+    <script src="../../../../assets/js/deptech-settings.js"></script>
+
+    <script>
+        (function () {
+            'use strict';
+
+            var allDevices = [];
+
+            document.addEventListener('DOMContentLoaded', init);
+
+            function init() {
+                if (typeof DeptechStore === 'undefined') {
+                    console.error('[perangkat] DeptechStore tidak ditemukan');
+                    renderError('Sistem belum siap. Cek path store.js.');
+                    return;
+                }
+
+                if (!DeptechStore.isLoggedIn()) {
+                    window.location.href = '../auth/login.html';   // ✅ FIX: naik 1x
+                    return;
+                }
+
+                loadDevices();
+
+                var logoutAllBtn = document.getElementById('btnLogoutAll');
+                if (logoutAllBtn) {
+                    logoutAllBtn.addEventListener('click', function () {
+                        if (!confirm('Logout dari semua perangkat? Anda akan keluar dari akun ini.')) return;
+                        if (typeof DeptechStore.clearLoginHistory === 'function') {
+                            DeptechStore.clearLoginHistory();
+                        }
+                        DeptechStore.clearUser();
+                        if (typeof showToast === 'function') showToast('Berhasil logout dari semua perangkat');
+                        setTimeout(function () {
+                            window.location.href = '../auth/login.html';   // ✅ FIX
+                        }, 800);
+                    });
+                }
+            }
+
+            function loadDevices() {
+                var history = [];
+                try {
+                    history = DeptechStore.getLoginHistory() || [];
+                } catch (e) {
+                    console.error('[perangkat] Gagal ambil history:', e);
+                }
+                allDevices = groupDevices(history);
+                renderDevices();
+            }
+
+            function groupDevices(history) {
+                if (history.length === 0) return [];
+
+                var map = {};
+                history.forEach(function (item) {
+                    var key = String(item.device || 'Unknown');
+                    if (!map[key]) {
+                        map[key] = {
+                            device: key,
+                            location: item.location || 'Indonesia',
+                            icon: item.icon || '',
+                            lastLogin: item.date,
+                            count: 1
+                        };
+                    } else {
+                        map[key].count += 1;
+                        if (new Date(item.date) > new Date(map[key].lastLogin)) {
+                            map[key].lastLogin = item.date;
+                            map[key].location = item.location || map[key].location;
+                        }
+                    }
+                });
+
+                var devices = Object.keys(map).map(function (k) { return map[k]; });
+                devices.sort(function (a, b) {
+                    return new Date(b.lastLogin) - new Date(a.lastLogin);
+                });
+                return devices;
+            }
+
+            function renderDevices() {
+                var container = document.getElementById('deviceList');
+                var summaryBar = document.getElementById('summaryBar');
+                var countEl = document.getElementById('deviceCount');
+                if (!container) return;
+
+                if (allDevices.length === 0) {
+                    container.innerHTML =
+                        '<div style="padding:44px 20px;text-align:center;color:var(--text-muted);">' +
+                            '<i class="fa-solid fa-laptop" style="font-size:38px;display:block;margin-bottom:12px;opacity:0.45;"></i>' +
+                            '<p style="font-size:12px;">Belum ada perangkat terdaftar</p>' +
+                            '<p style="font-size:10.5px;margin-top:4px;opacity:0.7;">Login dulu supaya perangkat muncul di sini</p>' +
+                        '</div>';
+                    if (summaryBar) summaryBar.style.display = 'none';
+                    return;
+                }
+
+                var html = '';
+                allDevices.forEach(function (d, index) {
+                    html += renderItem(d, index === 0);
+                });
+                container.innerHTML = html;
+
+                if (summaryBar) summaryBar.style.display = 'flex';
+
+                if (countEl) {
+                    countEl.innerHTML = '<i class="fa-solid fa-circle-info" style="margin-right:4px;"></i> Total ' +
+                        allDevices.length + ' perangkat terdaftar';
+                }
+
+                container.querySelectorAll('.device-action').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        handleDelete(this.dataset.device);
+                    });
+                });
+            }
+
+            function renderItem(d, isCurrent) {
+                var device = String(d.device || 'Perangkat');
+                var location = String(d.location || 'Indonesia');
+
+                var iconClass = d.icon;
+                if (!iconClass) {
+                    if (/mobile|android|iphone/i.test(device)) iconClass = 'fa-mobile-screen-button';
+                    else if (/tablet|ipad/i.test(device)) iconClass = 'fa-tablet-screen-button';
+                    else if (/desktop|mac|windows|linux/i.test(device)) iconClass = 'fa-laptop';
+                    else iconClass = 'fa-globe';
+                }
+
+                var iconType = isCurrent ? 'current' : '';
+
+                var badgeHtml = isCurrent
+                    ? '<span class="device-badge current"><i class="fa-solid fa-circle-check text-[8px] mr-1"></i> Perangkat saat ini</span>'
+                    : '<span class="device-badge registered">Terakhir aktif ' + esc(formatRelative(d.lastLogin)) + '</span>';
+
+                var deleteBtn = '';
+                if (!isCurrent) {
+                    deleteBtn = '<button class="device-action" data-device="' + esc(device) + '" title="Hapus perangkat">' +
+                        '<i class="fa-solid fa-xmark"></i></button>';
+                }
+
+                return (
+                    '<div class="device-item" data-device="' + esc(device) + '">' +
+                        '<div class="device-icon ' + iconType + '"><i class="fa-solid ' + iconClass + '"></i></div>' +
+                        '<div class="device-info">' +
+                            '<div class="device-name">' + esc(device) + '</div>' +
+                            '<div class="device-detail">' + esc(location) + '</div>' +
+                            badgeHtml +
+                        '</div>' +
+                        '<div class="device-status">' +
+                            '<div class="status-time">' + (isCurrent ? 'Aktif' : '-') + '</div>' +
+                            '<div class="status-date">' + (isCurrent ? 'Sekarang' : esc(formatRelative(d.lastLogin))) + '</div>' +
+                        '</div>' +
+                        deleteBtn +
+                    '</div>'
+                );
+            }
+
+            function handleDelete(deviceName) {
+                if (!deviceName) return;
+                if (!confirm('Hapus "' + deviceName + '" dari daftar perangkat?')) return;
+
+                var history = DeptechStore.getLoginHistory() || [];
+                var filtered = history.filter(function (item) {
+                    return String(item.device) !== String(deviceName);
+                });
+
+                localStorage.setItem(DeptechStore.KEYS.logins, JSON.stringify(filtered));
+
+                allDevices = groupDevices(filtered);
+                renderDevices();
+
+                if (typeof showToast === 'function') showToast('Perangkat berhasil dihapus');
+            }
+
+            function renderError(msg) {
+                var container = document.getElementById('deviceList');
+                if (!container) return;
+                container.innerHTML =
+                    '<div style="padding:30px;text-align:center;color:var(--danger);font-size:12px;">' +
+                        '<i class="fa-solid fa-triangle-exclamation" style="font-size:28px;display:block;margin-bottom:10px;"></i>' +
+                        esc(msg) +
+                    '</div>';
+            }
+
+            function formatRelative(dateStr) {
+                if (!dateStr) return '-';
+                var date = new Date(dateStr);
+                var now = new Date();
+                var diffMs = now - date;
+                var diffMin = Math.floor(diffMs / 60000);
+                var diffHour = Math.floor(diffMs / 3600000);
+                var diffDay = Math.floor(diffMs / 86400000);
+
+                if (diffMin < 1) return 'Baru saja';
+                if (diffMin < 60) return diffMin + ' menit lalu';
+                if (diffHour < 24) return diffHour + ' jam lalu';
+                if (diffDay < 7) return diffDay + ' hari lalu';
+
+                return date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            }
+
+            function esc(str) {
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
+        })();
+    </script>
+
+</body>
+
+</html>

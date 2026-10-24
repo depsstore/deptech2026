@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Title Default -->
+    <title>DepTech</title>
+
+    <!-- Theme Color (Light & Dark) -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <!-- Framework & Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="min-h-screen pb-[90px] page-content">
+
+        <!-- =====================================================
+             NAVBAR
+        ====================================================== -->
+        <nav class="navbar-blue">
+            <a href="/index.html" class="brand">
+                <img src="/src/frontend/assets/img/brandnolatar.png" alt="DEPTECH" class="logo-white" onerror="this.style.display='none'">
+                <span class="font-days">
+                    DEP<strong>TECH</strong>
+                </span>
+            </a>
+            <div class="nav-actions">
+                <a href="../notifikasi.html" class="nav-btn">
+                    <i class="fa-regular fa-bell"></i>
+                </a>
+                <a href="../profile/account/index.html" class="nav-btn">
+                    <i class="fa-solid fa-gear"></i>
+                </a>
+            </div>
+        </nav>
+
+        <!-- =====================================================
+             HEADER
+        ====================================================== -->
+        <header class="activity-header">
+            <div class="max-w-7xl mx-auto px-4 sm:px-8 flex items-center justify-between">
+                <div>
+                    <span class="page-label">Riwayat</span>
+                    <h1>Aktivitas</h1>
+                </div>
+                <div class="view-toggle" id="viewToggle">
+                    <button class="active" data-view="all" onclick="setFilter('all')" title="Semua">
+                        <i class="fa-solid fa-list"></i>
+                    </button>
+                    <button data-view="income" onclick="setFilter('income')" title="Uang Masuk">
+                        <i class="fa-solid fa-arrow-down"></i>
+                    </button>
+                    <button data-view="expense" onclick="setFilter('expense')" title="Uang Keluar">
+                        <i class="fa-solid fa-arrow-up"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- =====================================================
+             MAIN
+        ====================================================== -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-8 pt-5">
+
+            <!-- SUMMARY -->
+            <section class="activity-summary">
+                <div class="flex-1 flex flex-col gap-1">
+                    <span class="summary-label">Uang masuk</span>
+                    <strong class="summary-value in" id="summaryIncome">Rp0</strong>
+                </div>
+                <div class="w-px h-8 mx-5 bg-[#e4edf7]"></div>
+                <div class="flex-1 flex flex-col gap-1">
+                    <span class="summary-label">Uang keluar</span>
+                    <strong class="summary-value out" id="summaryExpense">Rp0</strong>
+                </div>
+            </section>
+
+            <!-- SEARCH -->
+            <div class="activity-search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Cari transaksi">
+            </div>
+
+            <!-- LIST -->
+            <div class="mt-0" id="activityList"></div>
+
+        </main>
+
+        <!-- =====================================================
+             BOTTOM NAV
+        ====================================================== -->
+        <nav class="bottom-nav">
+            <a href="/index.html">
+                <i class="fa-solid fa-house"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="/src/frontend/pages/activities/index.html" class="active">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Aktivitas</span>
+            </a>
+            <a href="/src/frontend/pages/qris.html" class="qr-nav">
+                <div><i class="fa-solid fa-qrcode"></i></div>
+            </a>
+            <a href="/src/frontend/pages/product/index.html">
+                <i class="fa-solid fa-store"></i>
+                <span>Produk</span>
+            </a>
+            <a href="/src/frontend/pages/profile/account/index.html">
+                <i class="fa-regular fa-user"></i>
+                <span>Profil</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+    <script src="../../assets/js/store.js"></script>
+    <script src="../../assets/js/global.js"></script>
+    <script src="../../assets/js/deptech-ui.js"></script>
+    <script src="../../assets/js/deptech-settings.js"></script>
+
+        <!-- Shared helpers -->
+    <script src="../../assets/js/shared-helpers.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            var currentFilter = 'all';
+            var currentSearch = '';
+            var container = document.getElementById('activityList');
+
+            // =====================================================
+            // SUMMARY
+            // =====================================================
+            function renderSummary() {
+                var transactions = DeptechStore.getTransactions();
+                var income = 0;
+                var expense = 0;
+
+                transactions.forEach(function(t) {
+                    if (t.type === 'income') income += Number(t.amount) || 0;
+                    else expense += Number(t.amount) || 0;
+                });
+
+                var elIn = document.getElementById('summaryIncome');
+                var elOut = document.getElementById('summaryExpense');
+
+                if (elIn) elIn.textContent = SharedHelpers.formatCurrency(income);
+                if (elOut) elOut.textContent = SharedHelpers.formatCurrency(expense);
+            }
+
+            // =====================================================
+            // GABUNG TRANSAKSI + ACTIVITY LOG
+            // =====================================================
+            function getSemuaAktivitas() {
+                var all = [];
+
+                // 1. Transaksi keuangan
+                DeptechStore.getTransactions().forEach(function(t) {
+                    var isIncome = t.type === 'income';
+                    all.push({
+                        id: 'trx_' + t.id,
+                        icon: SharedHelpers.getIconForTransaction(t),
+                        iconType: isIncome ? 'income' : 'expense',
+                        title: t.description || 'Transaksi',
+                        subtitle: SharedHelpers.getCategoryLabel(t.category),
+                        amount: (isIncome ? '+' : '-') + SharedHelpers.formatCurrency(t.amount),
+                        amountType: isIncome ? 'in' : 'out',
+                        date: t.date,
+                        kind: 'transaction'
+                    });
+                });
+
+                // 2. Log aksi user
+                var activityLog = DeptechStore.getActivityLog ? DeptechStore.getActivityLog() : [];
+                activityLog.forEach(function(l) {
+                    all.push({
+                        id: 'act_' + l.id,
+                        icon: l.icon || 'fa-circle-info',
+                        iconType: l.iconType || 'info',
+                        title: l.title || 'Aktivitas',
+                        subtitle: l.description || '',
+                        amount: '',
+                        amountType: 'info',
+                        date: l.date,
+                        kind: 'activity'
+                    });
+                });
+
+                all.sort(function(a, b) {
+                    return new Date(b.date) - new Date(a.date);
+                });
+
+                return all;
+            }
+
+            // =====================================================
+            // RENDER LIST
+            // =====================================================
+            function renderTransactions() {
+                if (!container) return;
+
+                var all = getSemuaAktivitas();
+
+                var filtered = all.filter(function(a) {
+                    var matchFilter =
+                        currentFilter === 'all' ||
+                        (currentFilter === 'income' && a.amountType === 'in') ||
+                        (currentFilter === 'expense' && a.amountType === 'out');
+
+                    var search = currentSearch.toLowerCase();
+                    var matchSearch = (a.title || '').toLowerCase().indexOf(search) !== -1 ||
+                        (a.subtitle || '').toLowerCase().indexOf(search) !== -1;
+
+                    return matchFilter && matchSearch;
+                });
+
+                if (filtered.length === 0) {
+                    container.innerHTML =
+                        '<div class="empty-state">' +
+                        '<i class="fa-regular fa-folder-open"></i>' +
+                        '<h3>Tidak ada aktivitas</h3>' +
+                        '<p>Coba ubah filter atau kata pencarian.</p>' +
+                        '</div>';
+                    return;
+                }
+
+                var currentDateLabel = '';
+                var html = '';
+
+                filtered.forEach(function(a) {
+                    var dateLabel = SharedHelpers.labelTanggal(a.date);
+                    if (dateLabel !== currentDateLabel) {
+                        currentDateLabel = dateLabel;
+                        html += '<div class="date-title">' + SharedHelpers.escapeHtml(dateLabel) + '</div>';
+                    }
+
+                    var timeStr = new Date(a.date).toLocaleTimeString('id-ID', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    if (a.kind === 'activity') {
+                        html +=
+                            '<div class="activity-card">' +
+                            '<div class="activity-icon ' + SharedHelpers.escapeAttr(a.iconType) + '-icon">' +
+                            '<i class="fa-solid ' + SharedHelpers.escapeAttr(a.icon) + '"></i>' +
+                            '</div>' +
+                            '<div class="activity-info">' +
+                            '<strong class="activity-name">' + SharedHelpers.escapeHtml(a.title) + '</strong>' +
+                            '<span class="activity-time">' + SharedHelpers.escapeHtml(timeStr) + ' · ' + SharedHelpers.escapeHtml(a.subtitle) + '</span>' +
+                            '</div>' +
+                            '</div>';
+                    } else {
+                        html +=
+                            '<div class="activity-card">' +
+                            '<div class="activity-icon ' + (a.amountType === 'in' ? 'income-icon' : '') + '">' +
+                            '<i class="fa-solid ' + SharedHelpers.escapeAttr(a.icon) + '"></i>' +
+                            '</div>' +
+                            '<div class="activity-info">' +
+                            '<strong class="activity-name">' + SharedHelpers.escapeHtml(a.title) + '</strong>' +
+                            '<span class="activity-time">' + SharedHelpers.escapeHtml(timeStr) + ' · ' + SharedHelpers.escapeHtml(a.subtitle) + '</span>' +
+                            '</div>' +
+                            '<strong class="activity-amount ' + SharedHelpers.escapeAttr(a.amountType) + '">' + SharedHelpers.escapeHtml(a.amount) + '</strong>' +
+                            '</div>';
+                    }
+                });
+
+                container.innerHTML = html;
+            }
+
+            // =====================================================
+            // FILTER
+            // =====================================================
+            window.setFilter = function(filter) {
+                currentFilter = filter;
+
+                document.querySelectorAll('#viewToggle button').forEach(function(btn) {
+                    btn.classList.remove('active');
+                    if (btn.dataset.view === filter) btn.classList.add('active');
+                });
+
+                renderTransactions();
+            };
+
+            // =====================================================
+            // SEARCH
+            // =====================================================
+            var searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', SharedHelpers.debounce(function() {
+                    currentSearch = this.value.trim();
+                    renderTransactions();
+                }, 200));
+            }
+
+            // =====================================================
+            // INIT
+            // =====================================================
+            renderSummary();
+            renderTransactions();
+        });
+    </script>
+
+</body>
+
+</html>

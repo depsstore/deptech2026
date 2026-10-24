@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+    <title>Masuk — DepTech</title>
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Framework & Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/auth.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="auth-page page-content">
+
+        <!-- ============================================
+             LEFT PANEL — BRANDING (desktop ≥ 1024px)
+        ============================================= -->
+        <aside class="auth-brand-panel">
+            <div class="auth-brand-inner">
+
+                <a href="/index.html" class="auth-brand-logo">
+                    <img src="/src/frontend/assets/img/brandnolatar.png" alt="DEPTECH" onerror="this.style.display='none'">
+                    DEP<strong>TECH</strong>
+                </a>
+
+                <div class="auth-brand-hero">
+                    <div class="auth-brand-icon">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h1 class="auth-brand-title">
+                        Selamat datang<br>kembali di DepTech
+                    </h1>
+                    <p class="auth-brand-desc">
+                        Platform digital untuk belanja & menabung. Kelola keuangan,
+                        capai target, dan nikmati kemudahan bertransaksi dalam satu aplikasi.
+                    </p>
+
+                    <div class="auth-brand-features">
+                        <div class="auth-brand-feature">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Catat pemasukan & pengeluaran otomatis</span>
+                        </div>
+                        <div class="auth-brand-feature">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Buat target tabungan dengan deadline</span>
+                        </div>
+                        <div class="auth-brand-feature">
+                            <i class="fa-solid fa-check"></i>
+                            <span>Belanja produk digital dengan aman</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="auth-brand-footer">
+                    <span>© 2026 DepTech</span>
+                    <a href="/index.html">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Beranda
+                    </a>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- ============================================
+             RIGHT PANEL — FORM
+        ============================================= -->
+        <main class="auth-form-panel">
+
+            <!-- Mobile/tablet header -->
+            <header class="auth-mobile-header">
+                <a href="/index.html" class="mobile-logo">
+                    <img src="/src/frontend/assets/img/brandnolatar.png" alt="DEPTECH" onerror="this.style.display='none'">
+                    DEP<strong>TECH</strong>
+                </a>
+                <div class="mobile-title">Masuk ke Akun</div>
+                <div class="mobile-desc">Silakan masuk untuk melanjutkan ke DepTech</div>
+            </header>
+
+            <!-- Form container -->
+            <div class="auth-form-container">
+
+                <!-- Desktop title -->
+                <div class="auth-form-title">
+                    <h1>Masuk ke Akun</h1>
+                    <p>Silakan masukkan email dan password Anda untuk melanjutkan.</p>
+                </div>
+
+                <!-- Form -->
+                <form id="loginForm" class="auth-form" novalidate autocomplete="on">
+
+                    <div id="loginError" class="auth-error" role="alert">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <span>Email atau password salah!</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
+                            <input
+                                type="email"
+                                id="loginEmail"
+                                name="email"
+                                placeholder="nama@email.com"
+                                autocomplete="email"
+                                inputmode="email"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                            <input
+                                type="password"
+                                id="loginPassword"
+                                name="password"
+                                placeholder="Masukkan password"
+                                autocomplete="current-password"
+                                required>
+                            <button type="button" class="toggle-password" aria-label="Tampilkan password">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="remember-me">
+                            <input type="checkbox" name="remember" checked>
+                            <span>Ingat saya</span>
+                        </label>
+                        <button type="button" class="forgot-link" id="forgotLink">
+                            Lupa password?
+                        </button>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                        <span>Masuk</span>
+                    </button>
+
+                </form>
+
+                <div class="auth-divider">
+                    <span>atau masuk dengan</span>
+                </div>
+
+<!-- Google full-width -->
+                <div class="social-buttons">
+                      <button type="button" class="social-btn" onclick="googleLogin()">
+    <i class="fa-brands fa-google" style="color:#ea4335;"></i>
+    <span>Google</span>
+</button>
+                    <button type="button" class="social-btn">
+                        <i class="fa-brands fa-facebook" style="color:#1877f2;"></i>
+                        <span>Facebook</span>
+                    </button>
+                </div>
+
+                <div class="auth-footer-link">
+                    Belum punya akun? <a href="register.html">Daftar sekarang</a>
+                </div>
+
+                <a href="/index.html" class="auth-back-link">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Kembali ke Beranda
+                </a>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <!-- JS -->
+    <script src="../../../../assets/js/store.js"></script>
+    <script src="../../../../assets/js/global.js"></script>
+    <script src="../../../../assets/js/auth.js"></script>
+    <script src="../../../../assets/js/deptech-ui.js"></script>
+    <script src="../../../../assets/js/deptech-settings.js"></script>
+
+</body>
+
+</html>

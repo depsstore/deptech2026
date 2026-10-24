@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Title Default -->
+    <title>DepTech</title>
+
+    <!-- Theme Color (Light & Dark) -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <!-- Framework & Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="edit-profile-page page-content">
+
+        <header class="edit-profile-header">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <h1>Ubah PIN</h1>
+        </header>
+
+        <div class="edit-profile-container">
+            <div class="card-profile">
+
+                <div class="label">PIN Lama</div>
+                <div class="input-wrapper" style="margin-bottom: 16px;">
+                    <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                    <input type="password" id="oldPin" placeholder="Masukkan PIN lama" maxlength="6">
+                    <button type="button" class="toggle-password" onclick="togglePin(this)">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="label">PIN Baru</div>
+                <div class="input-wrapper" style="margin-bottom: 16px;">
+                    <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                    <input type="password" id="newPin" placeholder="PIN baru (6 digit)" maxlength="6">
+                    <button type="button" class="toggle-password" onclick="togglePin(this)">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="label">Konfirmasi PIN Baru</div>
+                <div class="input-wrapper">
+                    <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                    <input type="password" id="confirmPin" placeholder="Ulangi PIN baru" maxlength="6">
+                    <button type="button" class="toggle-password" onclick="togglePin(this)">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+
+                <div class="helper-text">PIN harus 6 digit angka</div>
+
+                <button class="btn-simpan" onclick="simpanPin()">Simpan PIN</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="../../../../assets/js/store.js"></script>
+    <script src="../../../../assets/js/global.js"></script>
+    <script src="../../../../assets/js/deptech-ui.js"></script>
+    <script src="../../../../assets/js/deptech-settings.js"></script>
+    <script>
+        var KEY_PIN = 'deptech_pin';
+
+        function togglePin(btn) {
+            var input = btn.closest('.input-wrapper').querySelector('input');
+            var icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-regular fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-regular fa-eye';
+            }
+        }
+
+        function simpanPin() {
+            var oldPin = document.getElementById('oldPin').value.trim();
+            var newPin = document.getElementById('newPin').value.trim();
+            var confirmPin = document.getElementById('confirmPin').value.trim();
+
+            if (!oldPin) { showToast('Masukkan PIN lama!'); return; }
+            if (oldPin.length !== 6 || isNaN(oldPin)) { showToast('PIN lama harus 6 digit!'); return; }
+            if (!newPin) { showToast('Masukkan PIN baru!'); return; }
+            if (newPin.length !== 6 || isNaN(newPin)) { showToast('PIN baru harus 6 digit!'); return; }
+            if (newPin !== confirmPin) { showToast('PIN baru tidak cocok!'); return; }
+            if (oldPin === newPin) { showToast('PIN baru harus berbeda!'); return; }
+
+            // Cek PIN lama (kalau sudah pernah di-set)
+            var savedPin = localStorage.getItem(KEY_PIN);
+            if (savedPin && savedPin !== oldPin) {
+                showToast('PIN lama salah!');
+                return;
+            }
+
+            var btn = document.querySelector('.btn-simpan');
+            btn.disabled = true;
+            btn.textContent = 'Menyimpan...';
+
+            setTimeout(function () {
+                localStorage.setItem(KEY_PIN, newPin);
+
+                if (typeof DeptechStore !== 'undefined' && typeof DeptechStore.logActivity === 'function') {
+                    DeptechStore.logActivity({
+                        action: 'change_pin',
+                        title: 'PIN Diubah',
+                        description: 'PIN keamanan berhasil diperbarui',
+                        icon: 'fa-lock',
+                        iconType: 'security'
+                    });
+                }
+
+                showToast('PIN berhasil diperbarui!');
+                btn.disabled = false;
+                btn.textContent = 'Simpan PIN';
+                setTimeout(function () { window.location.href = 'index.html'; }, 500);
+            }, 1000);
+        }
+
+        document.querySelectorAll('#oldPin, #newPin, #confirmPin').forEach(function (input) {
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+        });
+    </script>
+
+    <style>
+        .input-wrapper { position: relative; }
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            background: transparent;
+            border: 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+
+</body>
+
+</html>

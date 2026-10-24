@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>DepTech</title>
+
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="edit-profile-page page-content">
+
+        <header class="edit-profile-header">
+            <button class="back-btn" onclick="window.location.href='../index.html'">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <h1>Profile Settings</h1>
+        </header>
+
+        <div class="edit-profile-container">
+
+            <div class="avatar-section">
+                <div class="avatar-wrapper">
+                    <div class="avatar" id="profileAvatar" data-avatar>?</div>
+                    <button class="change-photo-btn" onclick="window.location.href='avatar.html'">
+                        <i class="fa-solid fa-camera"></i>
+                    </button>
+                </div>
+                <div class="avatar-info">
+                    <div class="avatar-name" id="profileName">Memuat...</div>
+                    <div class="avatar-email" id="profileEmail">-</div>
+                    <span class="avatar-status" id="profileStatus" style="display: none;">
+                        <i class="fa-solid fa-circle-check text-[8px] mr-1"></i> Terverifikasi
+                    </span>
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <button class="settings-item">
+                    <div class="item-icon"><i class="fa-regular fa-id-card"></i></div>
+                    <div class="item-content">
+                        <div class="item-title">Tipe Akun</div>
+                        <div class="item-sub">DANA User</div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right item-arrow"></i>
+                </button>
+
+                <button class="settings-item" onclick="window.location.href='avatar.html'">
+                    <div class="item-icon"><i class="fa-regular fa-image"></i></div>
+                    <div class="item-content">
+                        <div class="item-title">Ganti Gambar Profil</div>
+                        <div class="item-sub">Ubah foto profil Anda</div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right item-arrow"></i>
+                </button>
+
+                <button class="settings-item" onclick="window.location.href='edit-nama.html'">
+                    <div class="item-icon"><i class="fa-regular fa-user"></i></div>
+                    <div class="item-content">
+                        <div class="item-title">Nama Lengkap</div>
+                        <div class="item-sub" id="menuNama">-</div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right item-arrow"></i>
+                </button>
+
+                <button class="settings-item" onclick="window.location.href='edit-phone.html'">
+                    <div class="item-icon"><i class="fa-solid fa-phone"></i></div>
+                    <div class="item-content">
+                        <div class="item-title">Ubah Nomor Ponsel</div>
+                        <div class="item-sub" id="menuPhone">-</div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right item-arrow"></i>
+                </button>
+
+                <button class="settings-item" onclick="window.location.href='edit-email.html'">
+                    <div class="item-icon"><i class="fa-regular fa-envelope"></i></div>
+                    <div class="item-content">
+                        <div class="item-title">Alamat Email</div>
+                        <div class="item-sub" id="menuEmail">-</div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right item-arrow"></i>
+                </button>
+
+                <button class="settings-item" onclick="window.location.href='../security/index.html'">
+                    <div class="item-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="item-content">
+                        <div class="item-title">Keamanan</div>
+                        <div class="item-sub">Ubah PIN, password, dan keamanan</div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right item-arrow"></i>
+                </button>
+            </div>
+
+            <div class="danger-zone">
+                <div class="danger-title"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Danger Zone</div>
+                <button class="settings-item" onclick="confirmDelete()">
+                    <div class="item-icon"><i class="fa-solid fa-trash-can"></i></div>
+                    <div class="item-content">
+                        <div class="item-title">Hapus Akun</div>
+                        <div class="item-sub">Hapus akun dan semua data Anda</div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right item-arrow"></i>
+                </button>
+            </div>
+
+            <a href="../index.html" style="display: block; text-align: center; font-size: 12px; color: var(--text-muted); padding-top: 16px; text-decoration: none;">
+                <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Profil
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="../../../../assets/js/store.js"></script>
+    <script src="../../../../assets/js/global.js"></script>
+    <script src="../../../../assets/js/avatar.js"></script>
+    <script src="../../../../assets/js/deptech-ui.js"></script>
+    <script src="../../../../assets/js/deptech-settings.js"></script>
+
+    <script>
+        // =====================================================
+        // GUARD LOGIN + RENDER PROFIL
+        // =====================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof DeptechStore === 'undefined') {
+                console.error('[pribadi] DeptechStore tidak ditemukan');
+                return;
+            }
+
+            // Guard: kalau belum login → redirect
+            if (!DeptechStore.isLoggedIn()) {
+                window.location.href = '/src/frontend/pages/profile/account/auth/login.html';
+                return;
+            }
+
+            var user = DeptechStore.getUser();
+
+            // Nama & email
+            var nama = (user && user.name) ? user.name : 'User';
+            var email = (user && user.email) ? user.email : '-';
+
+            var nameEl = document.getElementById('profileName');
+            var emailEl = document.getElementById('profileEmail');
+            var statusEl = document.getElementById('profileStatus');
+            var menuNama = document.getElementById('menuNama');
+            var menuEmail = document.getElementById('menuEmail');
+            var menuPhone = document.getElementById('menuPhone');
+
+            if (nameEl) nameEl.textContent = nama;
+            if (emailEl) emailEl.textContent = email;
+            if (menuNama) menuNama.textContent = nama;
+            if (menuEmail) menuEmail.textContent = email;
+
+            // Nomor telepon (kalau ada di user object)
+            if (menuPhone) {
+                menuPhone.textContent = (user && user.phone) ? user.phone : 'Belum diisi';
+            }
+
+            // Status verifikasi (tampil kalau user punya email)
+            if (statusEl && email && email !== '-') {
+                statusEl.style.display = '';
+            }
+
+            // Avatar — AvatarHelper otomatis handle [data-avatar]
+            // (dipanggil otomatis saat DOMContentLoaded oleh avatar.js)
+        });
+
+        // =====================================================
+        // HAPUS AKUN
+        // =====================================================
+        function confirmDelete() {
+            if (!confirm('Apakah Anda yakin ingin menghapus akun ini? Tindakan ini tidak dapat dibatalkan!')) return;
+
+            if (typeof DeptechStore !== 'undefined') {
+                DeptechStore.clearAll();
+            }
+
+            showToast('Akun berhasil dihapus');
+
+            setTimeout(function() {
+                window.location.href = '../../../auth/login.html';
+            }, 1200);
+        }
+    </script>
+
+</body>
+
+</html>

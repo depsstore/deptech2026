@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Title Default -->
+    <title>DepTech</title>
+
+    <!-- Theme Color (Light & Dark) -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <!-- Framework & Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <!-- Canvas background -->
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="min-h-screen pb-[90px] page-content">
+
+        <!-- =====================================================
+             NAVBAR
+        ====================================================== -->
+        <nav class="navbar-blue">
+            <a href="/index.html" class="brand">
+                <img src="/src/frontend/assets/img/brandnolatar.png" alt="DEPTECH" class="logo-white" onerror="this.style.display='none'">
+                <span class="font-days">
+                    DEP<strong>TECH</strong>
+                </span>
+            </a>
+            <div class="nav-actions">
+                <a href="../notifikasi.html" class="nav-btn">
+                    <i class="fa-regular fa-bell"></i>
+                </a>
+                <a href="../profile/account/index.html" class="nav-btn">
+                    <i class="fa-solid fa-gear"></i>
+                </a>
+            </div>
+        </nav>
+
+        <!-- =====================================================
+             MAIN — TARGET PAGE
+        ====================================================== -->
+        <main class="target-page">
+
+            <header class="target-header">
+                <div>
+                    <h1></h1>
+                </div>
+                <div class="header-actions">
+                    <div class="view-toggle" id="viewToggle">
+                        <button class="active" data-view="grid" onclick="setView('grid')">
+                            <i class="fa-solid fa-table-cells"></i>
+                        </button>
+                        <button data-view="list" onclick="setView('list')">
+                            <i class="fa-solid fa-list"></i>
+                        </button>
+                    </div>
+                    <button class="add-target" onclick="window.location.href='tambah.html'">
+    <i class="fa-solid fa-plus"></i>
+</button>
+                </div>
+            </header>
+
+            <div id="targetContainer"></div>
+
+        </main>
+
+        <!-- =====================================================
+             BOTTOM NAV
+        ====================================================== -->
+        <nav class="bottom-nav">
+            <a href="/index.html">
+                <i class="fa-solid fa-house"></i>
+                <span>Beranda</span>
+            </a>
+            <a href="/src/frontend/pages/activities/index.html">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Aktivitas</span>
+            </a>
+            <a href="/src/frontend/pages/qris.html" class="qr-nav">
+                <div><i class="fa-solid fa-qrcode"></i></div>
+            </a>
+            <a href="/src/frontend/pages/product/index.html">
+                <i class="fa-solid fa-store"></i>
+                <span>Produk</span>
+            </a>
+            <a href="/src/frontend/pages/profile/account/index.html" class="active">
+                <i class="fa-regular fa-user"></i>
+                <span>Profil</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <!-- =====================================================
+         MODAL 1: TAMBAH / EDIT TARGET
+    ===================================================== -->
+    <div id="targetModalBackdrop" class="modal-backdrop">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+
+            <div class="modal-header">
+                <h2 id="modalTitle">Tambah Target</h2>
+                <button class="modal-close" onclick="closeTargetModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="formMode" value="tambah">
+                <input type="hidden" id="targetId" value="">
+                <input type="hidden" id="isLimited" value="true">
+
+                <div class="form-group">
+                    <label>Nama Target <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-regular fa-bullseye"></i></span>
+                        <input type="text" id="targetName" placeholder="Misal: Laptop Baru">
+                    </div>
+                </div>
+
+                <div class="form-group" id="groupTargetAmount">
+                    <label>Nominal Target <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-solid fa-rupiah-sign"></i></span>
+                        <input type="number" id="targetAmount" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Jumlah Terkumpul</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-solid fa-circle-check"></i></span>
+                        <input type="number" id="currentAmount" placeholder="0" value="0">
+                    </div>
+                    <div class="helper-text">Jumlah yang sudah Anda kumpulkan</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Deadline</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-regular fa-calendar"></i></span>
+                        <input type="date" id="deadline">
+                    </div>
+                    <div class="helper-text">Kosongkan jika tanpa deadline</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Status Target</label>
+                    <div class="toggle-group">
+                        <button type="button" class="toggle-option active" data-value="limited" onclick="selectLimit('limited')">Terbatas</button>
+                        <button type="button" class="toggle-option" data-value="unlimited" onclick="selectLimit('unlimited')">Tidak Terbatas</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" onclick="closeTargetModal()">Batal</button>
+                <button class="btn-modal-save" onclick="saveTarget()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL 2: DETAIL TARGET
+    ===================================================== -->
+    <div id="detailModalBackdrop" class="modal-backdrop">
+        <div class="modal-sheet modal-sheet-tall">
+            <div class="modal-handle"></div>
+
+            <div class="modal-header">
+                <h2>Detail Target</h2>
+                <button class="modal-close" onclick="closeDetailModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div id="detailContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL 3: TAMBAH UANG
+    ===================================================== -->
+    <div id="addMoneyModalBackdrop" class="modal-backdrop">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+
+            <div class="modal-header">
+                <h2>Tambah Uang</h2>
+                <button class="modal-close" onclick="closeAddMoneyModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="addMoneyTargetId" value="">
+
+                <div class="form-group">
+                    <label>Nominal <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-solid fa-rupiah-sign"></i></span>
+                        <input type="number" id="addMoneyAmount" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Catatan (opsional)</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-regular fa-note-sticky"></i></span>
+                        <input type="text" id="addMoneyNote" placeholder="Misal: Nabung mingguan">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" onclick="closeAddMoneyModal()">Batal</button>
+                <button class="btn-modal-save" onclick="saveAddMoney()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL 4: RIWAYAT
+    ===================================================== -->
+    <div id="historyModalBackdrop" class="modal-backdrop">
+        <div class="modal-sheet modal-sheet-tall">
+            <div class="modal-handle"></div>
+
+            <div class="modal-header">
+                <h2>Riwayat Transaksi</h2>
+                <button class="modal-close" onclick="closeHistoryModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="historyTargetId" value="">
+                <div id="historyList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =====================================================
+         MODAL 5: EDIT LOG (UANG)
+    ===================================================== -->
+    <div id="editLogModalBackdrop" class="modal-backdrop">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+
+            <div class="modal-header">
+                <h2>Edit Riwayat</h2>
+                <button class="modal-close" onclick="closeEditLogModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <input type="hidden" id="editLogId" value="">
+
+                <div class="form-group">
+                    <label>Nominal <span class="required">*</span></label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-solid fa-rupiah-sign"></i></span>
+                        <input type="number" id="editLogAmount" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Catatan</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-regular fa-note-sticky"></i></span>
+                        <input type="text" id="editLogNote" placeholder="Catatan">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" onclick="closeEditLogModal()">Batal</button>
+                <button class="btn-modal-save" onclick="saveEditLog()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <!-- =====================================================
+         JAVASCRIPT — urutan: store dulu, baru yang lain
+    ====================================================== -->
+    <script src="../../assets/js/store.js"></script>
+    <script src="../../assets/js/global.js"></script>
+    <script src="../../assets/js/deptech-ui.js"></script>
+    <script src="../../assets/js/deptech-settings.js"></script>
+    <script src="../../assets/js/target.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTargets();
+        });
+    </script>
+
+</body>
+
+</html>

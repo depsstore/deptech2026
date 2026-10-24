@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Title Default -->
+    <title>DepTech</title>
+
+    <!-- Theme Color (Light & Dark) -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <!-- Framework & Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="edit-profile-page page-content">
+
+        <header class="edit-profile-header">
+            <button class="back-btn" onclick="window.location.href='/index.html'">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <h1>Pusat Bantuan</h1>
+        </header>
+
+        <div class="edit-profile-container">
+
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">
+                Temukan jawaban untuk pertanyaan umum seputar DepTech
+            </p>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-title">Bagaimana cara top up saldo?</span>
+                    <span class="faq-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <p>Anda dapat top up saldo melalui menu Top Up di halaman beranda. Pilih metode pembayaran yang tersedia (Bank Transfer, QRIS, atau E-Wallet) dan ikuti instruksi pembayaran.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-title">Bagaimana cara kirim uang ke pengguna lain?</span>
+                    <span class="faq-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <p>Masuk ke menu Kirim di halaman beranda, masukkan nomor telepon atau email penerima, tentukan nominal, lalu konfirmasi pengiriman.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-title">Bagaimana cara mengganti password?</span>
+                    <span class="faq-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <p>Buka menu Profil &gt; Keamanan &gt; Ubah Password. Masukkan password lama dan password baru, lalu simpan perubahan.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-title">Bagaimana cara menghubungi customer service?</span>
+                    <span class="faq-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <p>Anda dapat menghubungi customer service kami melalui email: support@deptech.com atau melalui chat di aplikasi.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    <span class="faq-title">Apakah ada biaya administrasi?</span>
+                    <span class="faq-icon"><i class="fa-solid fa-chevron-down"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <p>DepTech menerapkan biaya administrasi yang transparan untuk setiap transaksi. Detail biaya dapat dilihat di halaman informasi biaya.</p>
+                </div>
+            </div>
+
+            <div class="card-profile" style="margin-top: 16px; text-align: center; background: var(--accent-soft); border: 0;">
+                <p style="font-size: 11px; color: var(--accent);">
+                    <i class="fa-regular fa-circle-question mr-1"></i> Tidak menemukan jawaban? Hubungi kami di <strong>support@deptech.com</strong>
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="../../../assets/js/global.js"></script>
+    <script src="../../../assets/js/deptech-ui.js"></script>
+    <script src="../../../assets/js/deptech-settings.js"></script>
+
+    <style>
+        .faq-item {
+            background: var(--bg-card);
+            border-radius: 14px;
+            border: 1px solid var(--border-base);
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            cursor: pointer;
+            background: var(--bg-card);
+            border: 0;
+            color: var(--text-primary);
+            gap: 12px;
+            text-align: left;
+        }
+        
+        .faq-question .faq-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+        
+        .faq-question .faq-icon {
+            color: var(--accent);
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .3s ease;
+            padding: 0 16px;
+        }
+        
+        .faq-answer.open {
+            max-height: 300px;
+            padding: 0 16px 16px;
+        }
+        
+        .faq-answer p {
+            font-size: 12px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+    </style>
+
+    <script>
+        function toggleFaq(btn) {
+            var answer = btn.nextElementSibling;
+            var icon = btn.querySelector('.faq-icon i');
+            if (answer.classList.contains('open')) {
+                answer.classList.remove('open');
+                icon.className = 'fa-solid fa-chevron-down';
+            } else {
+                document.querySelectorAll('.faq-answer').forEach(function(el) {
+                    el.classList.remove('open');
+                });
+                document.querySelectorAll('.faq-icon i').forEach(function(el) {
+                    el.className = 'fa-solid fa-chevron-down';
+                });
+                answer.classList.add('open');
+                icon.className = 'fa-solid fa-chevron-up';
+            }
+        }
+    </script>
+
+</body>
+
+</html>

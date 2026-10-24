@@ -1,0 +1,419 @@
+/* =====================================================
+   DEPTECH UI v2.0 — Navbar, Canvas, Balance Card
+   Semua warna via theme.css.
+   ===================================================== */
+
+/* =====================================================
+   CANVAS BACKGROUND
+   ===================================================== */
+.bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+body.has-canvas-bg {
+    position: relative;
+    background: var(--bg);
+}
+
+.page-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* =====================================================
+   NAVBAR
+   ===================================================== */
+.navbar-blue {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+    color: #fff;
+    box-shadow: 0 4px 20px var(--accent-soft-2);
+}
+
+.navbar-blue .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.navbar-blue .brand strong { font-weight: 700; }
+
+.navbar-blue .brand img {
+    height: 28px;
+    width: auto;
+    object-fit: contain;
+}
+
+.navbar-blue .nav-actions { display: flex; gap: 6px; }
+
+.navbar-blue .nav-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    border: none;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-blue .nav-btn:active {
+    transform: scale(0.9);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* =====================================================
+   BALANCE CARD (v1 — full)
+   ===================================================== */
+.balance-card-new {
+    position: relative;
+    padding: 22px;
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+    border: 1px solid var(--border-base);
+    box-shadow: var(--shadow-md);
+    color: var(--text-primary);
+    margin-bottom: 14px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.balance-card-new::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+}
+
+.balance-card-new::after {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-soft), transparent 70%);
+    pointer-events: none;
+}
+
+.balance-card-new:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.balance-card-new .card-top {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.balance-card-new .card-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    border: 1px solid var(--accent-soft-2);
+}
+
+.balance-card-new .card-title { flex: 1; min-width: 0; }
+
+.balance-card-new .card-title .name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.balance-card-new .card-title .sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.balance-card-new .card-title .sub i {
+    font-size: 9px;
+    color: var(--accent);
+}
+
+.balance-card-new .card-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.balance-card-new .percent-badge {
+    padding: 5px 11px;
+    border-radius: var(--radius-full);
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    box-shadow: 0 4px 12px var(--accent-soft-2);
+    letter-spacing: -0.3px;
+}
+
+.balance-card-new .eye-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--accent-soft-2);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.balance-card-new .eye-btn:hover { background: var(--accent-soft-2); }
+.balance-card-new .eye-btn:active { transform: scale(0.9); }
+
+.balance-card-new .card-amount {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    gap: 8px;
+}
+
+.balance-card-new .card-amount .current {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    color: var(--text-primary);
+    line-height: 1.1;
+    transition: color 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.balance-card-new .card-amount .target {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-faint);
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+
+.hidden-value {
+    letter-spacing: 2px !important;
+    color: var(--text-faint) !important;
+}
+
+.balance-card-new .progress-bar {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 8px;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: 14px;
+    background: var(--bg-muted);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.balance-card-new .progress-bar .fill {
+    height: 100%;
+    border-radius: inherit;
+    background: var(--accent);
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px var(--accent-soft-2);
+}
+
+.balance-card-new .card-meta {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 10px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-base);
+    gap: 8px;
+}
+
+.balance-card-new .card-meta .info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.balance-card-new .card-meta .info i {
+    color: var(--accent);
+    font-size: 11px;
+}
+
+.balance-card-new .card-meta .info.sisa {
+    padding: 4px 10px;
+    background: var(--accent-soft);
+    border-radius: var(--radius-full);
+    color: var(--accent);
+    font-weight: 700;
+    transition: background 0.2s;
+}
+
+/* =====================================================
+   BALANCE CARD — SIMPLE (saldo utama)
+   ===================================================== */
+.balance-card-new.simple::before {
+    background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+}
+
+.balance-card-new.simple .card-label {
+    position: relative;
+    z-index: 1;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.balance-card-new.simple .card-label-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.balance-card-new.simple .card-label-left i {
+    color: var(--accent);
+    font-size: 11px;
+}
+
+.balance-card-new.simple .eye-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+}
+
+.balance-card-new.simple .card-value {
+    position: relative;
+    z-index: 1;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--text-primary);
+    margin-top: 4px;
+    line-height: 1.1;
+    transition: color 0.2s;
+}
+
+.balance-card-new.simple .card-sub {
+    position: relative;
+    z-index: 1;
+    font-size: 10px;
+    color: var(--text-faint);
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.balance-card-new.simple .card-sub .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--success);
+    display: inline-block;
+    box-shadow: 0 0 0 3px var(--success-soft);
+}
+
+.balance-card-new.simple .card-actions {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.balance-card-new.simple .card-action {
+    flex: 1;
+    height: 42px;
+    border-radius: var(--radius-md);
+    border: none;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: inherit;
+}
+
+.balance-card-new.simple .card-action.primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 12px var(--accent-soft-2);
+}
+
+.balance-card-new.simple .card-action.secondary {
+    background: var(--accent-soft);
+    color: var(--accent);
+    border: 1px solid var(--accent-soft-2);
+}
+
+.balance-card-new.simple .card-action:active {
+    transform: scale(0.96);
+}
+
+/* =====================================================
+   SECTION TITLE
+   ===================================================== */
+.section-title-new {
+    font-size: 14px;
+    font-weight: 800;
+    margin: 24px 0 12px;
+    color: var(--text-primary);
+}

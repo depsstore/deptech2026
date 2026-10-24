@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Title Default -->
+    <title>DepTech</title>
+
+    <!-- Theme Color (Light & Dark) -->
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- PWA -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <!-- Icon -->
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <!-- Framework & Font -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="edit-profile-page page-content">
+
+        <header class="edit-profile-header">
+            <button class="back-btn" onclick="window.location.href='pribadi.html'">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+            <h1>Ubah Nama Lengkap</h1>
+        </header>
+
+        <div class="edit-profile-container">
+            <div class="card-profile">
+                <div class="label">Nama Lengkap</div>
+                <div class="input-wrapper">
+                    <span class="input-icon"><i class="fa-regular fa-user"></i></span>
+                    <input type="text" id="fullName" placeholder="Masukkan nama lengkap">
+                </div>
+                <div class="helper-text" style="text-align: center;">Nama akan muncul di profil dan transaksi Anda</div>
+                <button class="btn-simpan" onclick="simpanNama()">Simpan Perubahan</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="../../../../assets/js/store.js"></script>
+    <script src="../../../../assets/js/global.js"></script>
+    <script src="../../../../assets/js/deptech-ui.js"></script>
+    <script src="../../../../assets/js/deptech-settings.js"></script>
+    <script>
+        // =====================================================
+        // LOAD NAMA DARI USER
+        // =====================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof DeptechStore === 'undefined') return;
+
+            if (!DeptechStore.isLoggedIn()) {
+                window.location.href = '../../auth/login.html';
+                return;
+            }
+
+            var user = DeptechStore.getUser();
+            var input = document.getElementById('fullName');
+            if (user && user.name) input.value = user.name;
+        });
+
+        // =====================================================
+        // SIMPAN NAMA
+        // =====================================================
+        function simpanNama() {
+            var input = document.getElementById('fullName');
+            var nama = input.value.trim();
+
+            if (!nama) {
+                showToast('Nama lengkap wajib diisi!');
+                input.focus();
+                return;
+            }
+            if (nama.length < 2) {
+                showToast('Nama minimal 2 karakter!');
+                input.focus();
+                return;
+            }
+
+            var btn = document.querySelector('.btn-simpan');
+            btn.disabled = true;
+            btn.textContent = 'Menyimpan...';
+
+            setTimeout(function () {
+                var user = DeptechStore.getUser() || {};
+                user.name = nama;
+                DeptechStore.setUser(user);
+
+                // Update juga di deptech_users (list akun)
+                try {
+                    var list = JSON.parse(localStorage.getItem('deptech_users') || '[]');
+                    for (var i = 0; i < list.length; i++) {
+                        if (list[i].email === user.email) {
+                            list[i].name = nama;
+                            break;
+                        }
+                    }
+                    localStorage.setItem('deptech_users', JSON.stringify(list));
+                } catch (e) {}
+
+                if (typeof DeptechStore.logActivity === 'function') {
+                    DeptechStore.logActivity({
+                        action: 'update_name',
+                        title: 'Nama Diperbarui',
+                        description: 'Nama diubah menjadi "' + nama + '"',
+                        icon: 'fa-user-pen',
+                        iconType: 'info'
+                    });
+                }
+
+                showToast('Nama berhasil diperbarui!');
+                btn.disabled = false;
+                btn.textContent = 'Simpan Perubahan';
+                setTimeout(function () { window.location.href = 'pribadi.html'; }, 500);
+            }, 1000);
+        }
+
+        document.getElementById('fullName').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') simpanNama();
+        });
+    </script>
+
+</body>
+
+</html>

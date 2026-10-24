@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>DepTech</title>
+
+    <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#2563eb">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="DepTech">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="DepTech - Platform digital untuk belanja & menabung">
+
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+    <link rel="apple-touch-icon" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/server.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-ui.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/deptech-settings.css">
+</head>
+
+<body class="has-canvas-bg">
+
+    <canvas id="bgCanvas" class="bg-canvas"></canvas>
+
+    <div class="edit-profile-page page-content">
+
+        <header class="edit-profile-header">
+                <button class="back-btn" onclick="window.location.href='/src/frontend/pages/profile/account/security/index.html'">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+            <h1>Riwayat Login</h1>
+        </header>
+
+        <div class="edit-profile-container">
+
+            <div class="security-card">
+                <div class="security-header">
+                    <div class="security-title">Riwayat Login</div>
+                    <div class="security-sub">Aktivitas login terakhir ke akun Anda</div>
+                </div>
+
+                <div class="security-body" id="loginHistoryList">
+                    <div style="padding:40px 20px;text-align:center;color:var(--text-muted);">
+                        <i class="fa-solid fa-circle-notch fa-spin" style="font-size:24px;"></i>
+                        <p style="margin-top:10px;font-size:12px;">Memuat riwayat...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="filterBar" style="display:none;margin-top:16px;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;background:var(--bg-card);border-radius:12px;border:1px solid var(--border-base);">
+                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                    <button class="filter-btn active" data-filter="all">Semua</button>
+                    <button class="filter-btn" data-filter="today">Hari ini</button>
+                    <button class="filter-btn" data-filter="week">Minggu ini</button>
+                </div>
+                <div style="display:flex;gap:6px;">
+                    <button id="btnRefresh" class="icon-btn" title="Muat ulang">
+                        <i class="fa-solid fa-rotate"></i>
+                    </button>
+                    <button id="btnClear" class="icon-btn danger" title="Hapus semua">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top:12px;text-align:center;padding:10px 12px;background:var(--bg-soft);border-radius:8px;border:1px solid var(--border-base);">
+                <span style="font-size:10.5px;color:var(--text-muted);line-height:1.5;">
+                    <i class="fa-solid fa-shield-halved" style="margin-right:4px;"></i>
+                    Jika melihat aktivitas mencurigakan, segera
+                    <a href="ubah-password.html" style="color:var(--accent);font-weight:600;text-decoration:none;">ubah password</a>
+                    Anda
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <style>
+        .filter-btn {
+            padding: 5px 14px;
+            border-radius: 20px;
+            background: var(--bg-soft);
+            color: var(--text-muted);
+            font-size: 10.5px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: .2s;
+            font-family: inherit;
+        }
+        .filter-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+        .filter-btn:not(.active):hover {
+            background: var(--bg-hover);
+        }
+        .icon-btn {
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 11px;
+            border: 1px solid var(--border-base);
+            cursor: pointer;
+            transition: .2s;
+        }
+        .icon-btn:hover {
+            background: var(--bg-hover);
+            color: var(--accent);
+        }
+        .icon-btn.danger:hover {
+            background: var(--danger-soft);
+            color: var(--danger);
+        }
+    </style>
+
+    <script src="../../../../assets/js/store.js"></script>
+    <script src="../../../../assets/js/global.js"></script>
+    <script src="../../../../assets/js/deptech-ui.js"></script>
+    <script src="../../../../assets/js/deptech-settings.js"></script>
+
+    <script>
+        (function () {
+            'use strict';
+
+            var currentFilter = 'all';
+            var allHistory = [];
+
+            document.addEventListener('DOMContentLoaded', init);
+
+            function init() {
+                if (typeof DeptechStore === 'undefined') {
+                    console.error('[riwayat-login] DeptechStore tidak ditemukan');
+                    renderEmpty('Sistem belum siap. Cek path store.js.');
+                    return;
+                }
+
+                if (!DeptechStore.isLoggedIn()) {
+                    window.location.href = '../auth/login.html';   // ✅ FIX: naik 1x
+                    return;
+                }
+
+                loadHistory();
+                attachEvents();
+            }
+
+            function loadHistory() {
+                try {
+                    allHistory = DeptechStore.getLoginHistory() || [];
+                } catch (e) {
+                    console.error('[riwayat-login] Gagal ambil history:', e);
+                    allHistory = [];
+                }
+                renderHistory();
+            }
+
+            function attachEvents() {
+                document.querySelectorAll('.filter-btn').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        document.querySelectorAll('.filter-btn').forEach(function (b) {
+                            b.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        currentFilter = this.dataset.filter;
+                        renderHistory();
+                    });
+                });
+
+                var refreshBtn = document.getElementById('btnRefresh');
+                if (refreshBtn) {
+                    refreshBtn.addEventListener('click', function () {
+                        loadHistory();
+                        if (typeof showToast === 'function') showToast('Riwayat dimuat ulang');
+                    });
+                }
+
+                var clearBtn = document.getElementById('btnClear');
+                if (clearBtn) {
+                    clearBtn.addEventListener('click', function () {
+                        if (!confirm('Hapus semua riwayat login?')) return;
+                        if (typeof DeptechStore.clearLoginHistory === 'function') {
+                            DeptechStore.clearLoginHistory();
+                        }
+                        allHistory = [];
+                        renderHistory();
+                        if (typeof showToast === 'function') showToast('Riwayat login dihapus');
+                    });
+                }
+            }
+
+            function filterHistory(list) {
+                if (currentFilter === 'all') return list;
+
+                var now = new Date();
+                var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                var startOfWeek = new Date(startOfToday);
+                startOfWeek.setDate(startOfWeek.getDate() - 7);
+
+                return list.filter(function (item) {
+                    var d = new Date(item.date);
+                    if (currentFilter === 'today') return d >= startOfToday;
+                    if (currentFilter === 'week') return d >= startOfWeek;
+                    return true;
+                });
+            }
+
+            function renderHistory() {
+                var container = document.getElementById('loginHistoryList');
+                var filterBar = document.getElementById('filterBar');
+                if (!container) return;
+
+                var filtered = filterHistory(allHistory).slice().sort(function (a, b) {
+                    return new Date(b.date) - new Date(a.date);
+                });
+
+                if (filterBar) {
+                    filterBar.style.display = allHistory.length === 0 ? 'none' : 'flex';
+                }
+
+                if (filtered.length === 0) {
+                    var msg = allHistory.length === 0
+                        ? 'Belum ada riwayat login'
+                        : 'Tidak ada riwayat pada filter ini';
+                    renderEmpty(msg);
+                    return;
+                }
+
+                var html = '';
+                filtered.forEach(function (item, index) {
+                    var isCurrent = index === 0 && currentFilter === 'all';
+                    html += renderItem(item, isCurrent);
+                });
+                container.innerHTML = html;
+            }
+
+            function renderItem(item, isCurrent) {
+                var device = String(item.device || 'Perangkat');
+                var location = String(item.location || 'Indonesia');
+
+                var iconClass = item.icon || 'fa-globe';
+                if (!item.icon) {
+                    if (/mobile|android|iphone/i.test(device)) iconClass = 'fa-mobile-screen-button';
+                    else if (/tablet|ipad/i.test(device)) iconClass = 'fa-tablet-screen-button';
+                    else if (/desktop|mac|windows|linux/i.test(device)) iconClass = 'fa-laptop';
+                }
+
+                var iconType = isCurrent ? 'current' : '';
+
+                var detailText = location || 'Lokasi tidak diketahui';
+
+                var badgeHtml = isCurrent
+                    ? '<span class="device-badge current"><i class="fa-solid fa-circle-check text-[8px] mr-1"></i> Aktif</span>'
+                    : '<span class="device-badge registered">Login berhasil</span>';
+
+                var dateObj = new Date(item.date);
+                var timeStr = pad(dateObj.getHours()) + ':' + pad(dateObj.getMinutes());
+                var dateStr = formatDate(dateObj);
+
+                return (
+                    '<div class="device-item">' +
+                        '<div class="device-icon ' + iconType + '"><i class="fa-solid ' + iconClass + '"></i></div>' +
+                        '<div class="device-info">' +
+                            '<div class="device-name">' + esc(device) + '</div>' +
+                            '<div class="device-detail">' + esc(detailText) + '</div>' +
+                            badgeHtml +
+                        '</div>' +
+                        '<div class="device-status">' +
+                            '<div class="status-time">' + esc(dateStr) + '</div>' +
+                            '<div class="status-date">' + esc(timeStr) + '</div>' +
+                        '</div>' +
+                    '</div>'
+                );
+            }
+
+            function renderEmpty(message) {
+                var container = document.getElementById('loginHistoryList');
+                if (!container) return;
+                container.innerHTML =
+                    '<div style="padding:44px 20px;text-align:center;color:var(--text-muted);">' +
+                        '<i class="fa-regular fa-clock" style="font-size:38px;display:block;margin-bottom:12px;opacity:0.45;"></i>' +
+                        '<p style="font-size:12px;">' + esc(message) + '</p>' +
+                    '</div>';
+            }
+
+            function pad(n) { return String(n).padStart(2, '0'); }
+
+            function formatDate(date) {
+                var now = new Date();
+                var diffMs = now - date;
+                var diffDay = Math.floor(diffMs / 86400000);
+
+                if (diffDay < 1) return 'Hari ini';
+                if (diffDay === 1) return 'Kemarin';
+                if (diffDay < 7) return diffDay + ' hari lalu';
+
+                return date.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            }
+
+            function esc(str) {
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
+        })();
+    </script>
+
+</body>
+
+</html>

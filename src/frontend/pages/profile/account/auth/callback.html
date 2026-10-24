@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memproses Login — DepTech</title>
+
+    <meta name="theme-color" content="#2563eb">
+
+    <link rel="icon" type="image/png" href="/src/frontend/assets/img/brandnolatar.png">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Days+One&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" href="/src/frontend/assets/css/theme.css">
+    <link rel="stylesheet" href="/src/frontend/assets/css/global.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-body);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 24px;
+        }
+
+        .callback-card {
+            background: var(--bg-card);
+            border-radius: 24px;
+            padding: 40px 32px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
+            border: 1px solid var(--border-base);
+        }
+
+        .callback-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 28px;
+        }
+
+        .callback-icon.loading {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .callback-icon.success {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            color: white;
+        }
+
+        .callback-icon.error {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.85; }
+        }
+
+        .callback-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.4px;
+        }
+
+        .callback-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .user-preview {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-soft);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .user-preview img,
+        .user-preview .letter {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .user-preview .letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .user-preview-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-preview-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-preview-email {
+            font-size: 11px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 2px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: var(--bg-muted);
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: .2s;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-back:hover {
+            background: var(--bg-hover);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="callback-card">
+
+        <div class="callback-icon loading" id="cbIcon">
+            <i class="fa-solid fa-spinner fa-spin" id="cbIconInner"></i>
+        </div>
+
+        <div class="callback-title" id="cbTitle">Memproses Login...</div>
+        <div class="callback-desc" id="cbDesc">Mohon tunggu sebentar, kami sedang memverifikasi akun Google Anda.</div>
+
+        <div id="cbUser" style="display:none;"></div>
+
+        <a href="login.html" class="btn-back" id="cbBtn" style="display:none;">
+            <i class="fa-solid fa-arrow-left"></i>
+            Kembali ke Login
+        </a>
+
+    </div>
+
+        <script src="../../../../assets/js/store.js"></script>
+    <script src="../../../../assets/js/global.js"></script>
+
+    <script>
+        (function () {
+            'use strict';
+
+            var iconEl = document.getElementById('cbIcon');
+            var iconInner = document.getElementById('cbIconInner');
+            var titleEl = document.getElementById('cbTitle');
+            var descEl = document.getElementById('cbDesc');
+            var userEl = document.getElementById('cbUser');
+            var btnEl = document.getElementById('cbBtn');
+
+            // =====================================================
+            // AMBIL PARAM DARI URL FRAGMENT
+            // =====================================================
+            var hash = window.location.hash.substring(1);
+            var params = new URLSearchParams(hash);
+            var accessToken = params.get('access_token');
+            var returnedState = params.get('state');
+            var error = params.get('error');
+
+            // Bersihkan URL fragment
+            if (window.history && window.history.replaceState) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            // =====================================================
+            // CEK ERROR DARI GOOGLE
+            // =====================================================
+            if (error) {
+                showErrorUI('Login gagal: ' + error);
+                return;
+            }
+
+            // =====================================================
+            // CEK STATE (FR-1.3 — mitigasi CSRF OAuth)
+            // =====================================================
+            var expectedState = null;
+            try { expectedState = sessionStorage.getItem('deptech_oauth_state'); } catch (e) {}
+
+            if (!returnedState) {
+                showErrorUI('State parameter tidak ditemukan. Login dibatalkan untuk keamanan.');
+                return;
+            }
+            if (!expectedState) {
+                showErrorUI('State sesi tidak ditemukan (sessionStorage kosong). ' +
+                    'Pastikan login Google dilakukan di tab yang sama.');
+                return;
+            }
+            if (returnedState !== expectedState) {
+                showErrorUI('State mismatch. Kemungkinan serangan CSRF atau sesi kadaluarsa.');
+                try { sessionStorage.removeItem('deptech_oauth_state'); } catch (e) {}
+                return;
+            }
+
+            // Hapus state setelah dipakai (one-time use)
+            try { sessionStorage.removeItem('deptech_oauth_state'); } catch (e) {}
+
+            if (!accessToken) {
+                showErrorUI('Token tidak ditemukan. Silakan coba login lagi.');
+                return;
+            }
+
+            // =====================================================
+            // FETCH USER INFO
+            // =====================================================
+            fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+                headers: { Authorization: 'Bearer ' + accessToken }
+            })
+            .then(function (res) {
+                if (!res.ok) throw new Error('Gagal ambil data user (HTTP ' + res.status + ')');
+                return res.json();
+            })
+            .then(function (user) {
+                if (!user || !user.email) throw new Error('Data user tidak lengkap');
+
+                showUserPreview(user);
+
+                if (typeof DeptechStore === 'undefined') {
+                    throw new Error('DeptechStore tidak tersedia');
+                }
+
+                DeptechStore.setUser({
+                    id: user.email,
+                    name: user.name || user.email,
+                    email: user.email,
+                    picture: user.picture || '',
+                    provider: 'google',
+                    emailVerified: user.verified_email || user.email_verified
+                });
+
+                // Migrasi legacy
+                try { DeptechStore.migrateLegacyData(); } catch (e) {}
+
+                if (typeof DeptechStore.logActivity === 'function') {
+                    DeptechStore.logActivity({
+                        action: 'login_google',
+                        title: 'Login dengan Google',
+                        description: user.email,
+                        icon: 'fa-brands fa-google',
+                        iconType: 'security'
+                    });
+                }
+
+                if (typeof DeptechStore.addLoginHistory === 'function') {
+                    var device = /Mobile|Android|iPhone|iPad/i.test(navigator.userAgent)
+                        ? 'Mobile' : 'Desktop';
+                    DeptechStore.addLoginHistory({
+                        device: device + ' · Google',
+                        location: 'Indonesia'
+                    });
+                }
+
+                setTimeout(function () {
+                    showSuccessUI(user);
+                    setTimeout(function () {
+                        window.location.href = '/src/frontend/pages/profile/account/index.html';
+                    }, 1500);
+                }, 600);
+            })
+            .catch(function (err) {
+                console.error('[Callback] Error:', err);
+                showErrorUI(err.message || 'Terjadi kesalahan saat login');
+            });
+
+            // =====================================================
+            // UI HELPERS
+            // =====================================================
+            function showUserPreview(user) {
+                var avatarHtml = user.picture
+                    ? '<img src="' + escapeAttr(user.picture) + '" alt="avatar" ' +
+                      'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';' +
+                      'this.nextElementSibling.textContent=\'' + escapeHtml((user.name || '?').charAt(0).toUpperCase()) + '\';">' +
+                      '<div class="letter" style="display:none;"></div>'
+                    : '<div class="letter">' + escapeHtml((user.name || '?').charAt(0).toUpperCase()) + '</div>';
+
+                userEl.innerHTML =
+                    '<div class="user-preview">' + avatarHtml +
+                    '<div class="user-preview-info">' +
+                    '<div class="user-preview-name">' + escapeHtml(user.name || 'User') + '</div>' +
+                    '<div class="user-preview-email">' + escapeHtml(user.email || '') + '</div>' +
+                    '</div>' +
+                    '</div>';
+                userEl.style.display = 'block';
+            }
+
+            function showSuccessUI(user) {
+                iconEl.className = 'callback-icon success';
+                iconInner.className = 'fa-solid fa-check';
+                titleEl.textContent = 'Login Berhasil!';
+                descEl.textContent = 'Selamat datang, ' + (user.name || user.email) + '. Mengalihkan...';
+            }
+
+            function showErrorUI(message) {
+                iconEl.className = 'callback-icon error';
+                iconInner.className = 'fa-solid fa-xmark';
+                titleEl.textContent = 'Login Gagal';
+                descEl.textContent = message;
+                btnEl.style.display = 'inline-flex';
+            }
+
+            function escapeHtml(str) {
+                return String(str == null ? '' : str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
+            function escapeAttr(str) {
+                return String(str == null ? '' : str)
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
+        })();
+    </script>
+
+</body>
+
+</html>
